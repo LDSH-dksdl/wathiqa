@@ -1331,6 +1331,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 var URL_='https://wathiqa-assistant.dbyan5919.workers.dev';
 if(!URL_||URL_.indexOf('@@')===0)return;
 var SAMPLE=URL_==='claude-sample',SYS='@@SYSTEM@@';
+/* تعليمات إضافية تُرسل مع كل سؤال (تعدّلها هنا دون لمس الوسيط) */
+var EXTRA='';
 var $=function(s){return document.querySelector(s)};
 var fab=$('#ai-fab'),panel=$('#ai'),gate=$('#ai-gate'),chat=$('#ai-chat'),body=$('#ai-body'),form=$('#ai-form'),q=$('#ai-q'),send=$('#ai-send'),where=$('#ai-where'),codeIn=$('#ai-code'),gerr=$('#ai-gerr'),btnNew=$('#ai-new');
 var mic=$('#ai-mic'),wave=$('#ai-wave'),spk=$('#ai-spk'),wt=$('#ai-wt');
@@ -1456,7 +1458,7 @@ function ask(text,viaVoice){
     var lead=SYS+'\n\nالقارئ الآن عند: '+(where_||'غير معروف')+'\n\n===== مقاطع من الوثيقة =====\n'+ctx.text+'\n===== نهاية المقاطع =====\n\nسؤال القارئ الآن: ';
     var m2=msgs.slice(0,-1).concat([{role:'user',content:lead+text}]);
     return sm(m2,{signal:ctl.signal,cache:false,onText:function(o){acc=o.text;ab.innerHTML=render(acc);body.scrollTop=body.scrollHeight}}).then(function(r){if(r&&r.text)acc=r.text;ab.innerHTML=render(acc)});
-  })):(post({code:code,messages:msgs,context:ctx.text,where:where_},ctl.signal).then(function(r){
+  })):(post({code:code,messages:msgs,context:ctx.text,where:where_,extra:EXTRA},ctl.signal).then(function(r){
     if(!r.ok||!r.body){return r.json().catch(function(){return {}}).then(function(j){throw j||{}})}
     var rd=r.body.getReader(),dec=new TextDecoder('utf-8'),buf='';
     function pump(){return rd.read().then(function(x){
@@ -1523,7 +1525,7 @@ function listenOnce(){
       var R=WS(),r=new R();r.lang='ar-SA';r.interimResults=true;r.continuous=false;r.maxAlternatives=1;
       var txt='',fin=false;
       r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;txt=t;q.value=t};
-      r.onerror=function(e){if(e.error==='not-allowed'||e.error==='service-not-allowed'){fin=true;listening=false;V.rec=null;voiceUI();rej({error:'mic'})}};
+      r.onerror=function(e){var er=e&&e.error;if(er==='no-speech'||er==='aborted')return;fin=true;listening=false;V.rec=null;voiceUI();rej({error:(er==='not-allowed'||er==='service-not-allowed')?'mic':(er||'mic')})};
       r.onend=function(){if(!fin){fin=true;done(txt)}};
       V.rec=r;try{r.start()}catch(e){listening=false;voiceUI();rej({error:'mic'})}
     }
@@ -1550,8 +1552,12 @@ function stopSpeak(){
   try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}
   V.speaking=false;voiceUI();
 }
-function micDenied(){
-  bubble('ai-err','لم يُسمح باستعمال المايكروفون هنا. اسمح به من إعدادات المتصفح للموقع، أو اكتب سؤالك.');
+function micDenied(e){
+  var er=e&&e.error,m='لم يُسمح باستعمال المايكروفون هنا. اسمح به من إعدادات المتصفح للموقع، أو اكتب سؤالك.';
+  if(er==='network')m='تعذّر الوصول إلى خدمة تحويل الصوت إلى نص. قد تحجبها الشبكة أو برنامج الاتصال عندك. جرّب من الجوال، أو اكتب سؤالك.';
+  else if(er==='audio-capture')m='لم أجد مايكروفونًا يعمل في هذا الجهاز. تأكد من توصيله واختياره في إعدادات النظام.';
+  else if(er==='language-not-supported')m='هذا المتصفح لا يدعم تحويل الكلام العربي إلى نص.';
+  bubble('ai-err',m);
 }
 function dictate(){
   if(conv)return;
@@ -1572,7 +1578,7 @@ function convLoop(){
       status('أتكلم…');
       return speakP(ans).then(function(){if(conv)convLoop()});
     });
-  }).catch(function(){if(conv){endConv();micDenied()}});
+  }).catch(function(e){if(conv){endConv();micDenied(e)}});
 }
 function startConv(){
   if(conv){endConv();return}
