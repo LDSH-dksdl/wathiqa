@@ -1332,5 +1332,85 @@ init();
 })();
 </script>
 
+<!-- شريحة «فعّل وضع سطح المكتب»: تظهر على الشاشات الضيقة فقط، وتختفي وحدها حين يُفعَّل وضع سطح المكتب -->
+<style>
+#dm{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  background:rgba(6,26,31,.96);font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:var(--fg,#f1ebdc);direction:rtl;overflow:auto}
+#dm[hidden]{display:none!important}
+#dm .dm-card{width:100%;max-width:440px;background:var(--panel,#0e2f35);border:1px solid var(--line,#2c4d54);border-radius:18px;padding:22px 18px 18px;box-sizing:border-box}
+#dm .dm-tag{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--gold,#e6b84a);border:1px solid var(--gold,#e6b84a);border-radius:99px;padding:2px 10px;margin-bottom:10px}
+#dm h2{margin:0 0 8px;font-size:21px;line-height:1.5;font-weight:700;text-wrap:balance}
+#dm p{margin:0 0 14px;font-size:15px;line-height:1.8;color:var(--fg-2,#bccac7)}
+#dm .dm-tabs{display:flex;gap:8px;margin:0 0 12px}
+#dm .dm-tabs button{flex:1;font:inherit;font-size:14px;padding:9px 6px;border-radius:10px;border:1px solid var(--line,#2c4d54);background:transparent;color:var(--fg-2,#bccac7);cursor:pointer}
+#dm .dm-tabs button[aria-selected=true]{background:var(--gold,#e6b84a);color:var(--gold-ink,#241a00);border-color:var(--gold,#e6b84a);font-weight:700}
+#dm ol{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:8px}
+#dm li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.7}
+#dm li b.n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--gold,#e6b84a);color:var(--gold-ink,#241a00);display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:2px}
+#dm .dm-k{display:inline-block;direction:ltr;background:var(--bg-2,#0a2328);border:1px solid var(--line,#2c4d54);border-radius:6px;padding:0 7px;font-size:14px}
+#dm .dm-mock{direction:ltr;margin:0 0 14px;border:1px solid var(--line,#2c4d54);border-radius:12px;background:var(--bg-2,#0a2328);padding:10px 12px;font-size:14px;color:var(--fg-2,#bccac7)}
+#dm .dm-mock .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 8px;border-radius:8px}
+#dm .dm-mock .hl{background:rgba(230,184,74,.16);outline:1.5px solid var(--gold,#e6b84a);color:var(--fg,#f1ebdc);font-weight:700}
+#dm .dm-box{width:16px;height:16px;border:2px solid var(--gold,#e6b84a);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;line-height:1;color:var(--gold,#e6b84a)}
+#dm .dm-go{display:block;width:100%;font:inherit;font-size:16px;font-weight:700;padding:12px;border-radius:12px;border:0;background:var(--gold,#e6b84a);color:var(--gold-ink,#241a00);cursor:pointer}
+#dm .dm-skip{display:block;width:100%;margin-top:6px;font:inherit;font-size:14px;padding:10px;border:0;background:transparent;color:var(--fg-3,#8fa9a5);cursor:pointer;text-decoration:underline}
+#dm .dm-hint{font-size:13px;color:var(--fg-3,#8fa9a5);margin:0 0 12px;line-height:1.7}
+</style>
+<div id="dm" hidden role="dialog" aria-modal="true" aria-labelledby="dm-h">
+  <div class="dm-card">
+    <span class="dm-tag">قبل أن تبدأ</span>
+    <h2 id="dm-h">فعّل «وضع سطح المكتب» لترى الخريطة كاملة</h2>
+    <p>الخريطة مرسومة لشاشة عريضة، وعلى الجوال تبدو صغيرة جدًا. خطوة واحدة في المتصفح تحلّ ذلك.</p>
+    <div class="dm-tabs" role="tablist">
+      <button type="button" role="tab" id="dm-t-a" aria-selected="true">أندرويد (كروم)</button>
+      <button type="button" role="tab" id="dm-t-i" aria-selected="false">آيفون (سفاري)</button>
+    </div>
+    <div id="dm-a">
+      <ol>
+        <li><b class="n">1</b><span>اضغط النقاط الثلاث <span class="dm-k">⋮</span> في أعلى المتصفح.</span></li>
+        <li><b class="n">2</b><span>فعّل الخيار <span class="dm-k">موقع سطح المكتب</span> (Desktop site).</span></li>
+        <li><b class="n">3</b><span>انتظر لحظة، فتُعاد الصفحة بالحجم الكامل.</span></li>
+      </ol>
+      <div class="dm-mock" aria-hidden="true">
+        <div class="row"><span>New tab</span><span>＋</span></div>
+        <div class="row"><span>History</span><span>↺</span></div>
+        <div class="row hl"><span>Desktop site</span><span class="dm-box">✓</span></div>
+        <div class="row"><span>Share…</span><span>⤴</span></div>
+      </div>
+    </div>
+    <div id="dm-i" hidden>
+      <ol>
+        <li><b class="n">1</b><span>اضغط <span class="dm-k">aA</span> في شريط العنوان.</span></li>
+        <li><b class="n">2</b><span>اختر <span class="dm-k">طلب موقع سطح المكتب</span> (Request Desktop Website).</span></li>
+        <li><b class="n">3</b><span>تُعاد الصفحة بالحجم الكامل.</span></li>
+      </ol>
+      <div class="dm-mock" aria-hidden="true">
+        <div class="row"><span>Show Reader</span><span>▤</span></div>
+        <div class="row hl"><span>Request Desktop Website</span><span class="dm-box">✓</span></div>
+        <div class="row"><span>Hide Toolbar</span><span>⌃</span></div>
+      </div>
+    </div>
+    <p class="dm-hint">بعد التفعيل تختفي هذه الشريحة وحدها. وتكبير الصفحة بإصبعين مفيد أيضًا.</p>
+    <button type="button" class="dm-go" id="dm-go">فهمت</button>
+    <button type="button" class="dm-skip" id="dm-skip">تخطَّ وتابع على الشاشة الصغيرة</button>
+  </div>
+</div>
+<script>
+(function(){
+  var box=document.getElementById('dm'); if(!box) return;
+  var seen=false; try{ seen = sessionStorage.getItem('dm-seen')==='1'; }catch(e){}
+  var narrow = (window.innerWidth||document.documentElement.clientWidth||1000) < 760;
+  if(!narrow || seen) return;
+  var ios=/iPhone|iPad|iPod/i.test(navigator.userAgent||'');
+  var ta=document.getElementById('dm-t-a'), ti=document.getElementById('dm-t-i'), pa=document.getElementById('dm-a'), pi=document.getElementById('dm-i');
+  function pick(i){ ta.setAttribute('aria-selected', i?'false':'true'); ti.setAttribute('aria-selected', i?'true':'false'); pa.hidden=!!i; pi.hidden=!i; }
+  ta.onclick=function(){pick(false)}; ti.onclick=function(){pick(true)}; pick(ios);
+  function close(){ box.hidden=true; try{ sessionStorage.setItem('dm-seen','1'); }catch(e){} }
+  document.getElementById('dm-go').onclick=close; document.getElementById('dm-skip').onclick=close;
+  box.hidden=false;
+})();
+</script>
+
 </body>
 </html>
