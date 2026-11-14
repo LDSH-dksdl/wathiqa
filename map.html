@@ -1512,7 +1512,7 @@ function extraNow(){
 var $=function(s){return document.querySelector(s)};
 var fab=$('#ai-fab'),panel=$('#ai'),gate=$('#ai-gate'),chat=$('#ai-chat'),body=$('#ai-body'),form=$('#ai-form'),q=$('#ai-q'),send=$('#ai-send'),where=$('#ai-where'),codeIn=$('#ai-code'),gerr=$('#ai-gerr'),btnNew=$('#ai-new');
 var mic=$('#ai-mic'),wave=$('#ai-wave'),spk=$('#ai-spk'),wt=$('#ai-wt');
-fab.hidden=false;$("#ai-tools").hidden=false;
+fab.hidden=false;if($("#ai-tools"))$("#ai-tools").hidden=false;
 var code='',hist=[],busy=false,idx=null,ctl=null,histLoaded=false;
 try{code=localStorage.getItem('ai-code')||''}catch(e){}
 
@@ -1687,7 +1687,7 @@ function showList(on){
 }
 listBtn.addEventListener('click',function(){showList()});
 var tools=$('#ai-tools'),fbBox=$('#fb-box'),fbText=$('#fb-text'),fbMsg=$('#fb-msg');
-$('#ai-fbtn').addEventListener('click',function(){
+if($('#ai-fbtn'))$('#ai-fbtn').addEventListener('click',function(){
   if(!code){fab.click();return}
   fbBox.hidden=false;fbMsg.textContent='';fbText.focus();
 });

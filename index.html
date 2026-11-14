@@ -1010,6 +1010,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .vw-btn:focus-visible { outline: 2px solid var(--vw-focus); outline-offset: 2px; }
 .vw-tabs .vw-btn { font-family: var(--vw-display); font-weight: 700; font-size: 12.5px; }
 .vw-btn[aria-current="true"], .vw-btn[aria-pressed="true"] { background: var(--vw-act); border-color: var(--vw-act); color: var(--vw-act-fg); }
+.vw-btn.gold { background: #f2c14e; border-color: #d9a53a; color: #0b3a44; text-decoration: none; }
 .vw-btn.warm { background: var(--vw-warm-bg); border-color: var(--vw-warm-line); color: var(--vw-warm); }
 .vw-btn.warm[aria-current="true"] { background: var(--vw-warm); border-color: var(--vw-warm); color: var(--vw-bar); }
 .vw-zoom { flex: none; display: flex; align-items: center; gap: 4px; }
@@ -1063,6 +1064,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
         <button type="button" class="vw-btn" data-m="short">المسار القصير</button>
         <button type="button" class="vw-btn" data-m="full">الوثيقة كاملة</button>
         <button type="button" class="vw-btn warm" data-m="decision">القرار</button>
+        <a class="vw-btn gold" href="map.html" target="_blank" rel="noopener">التجارب العالمية</a>
+        <a class="vw-btn" href="https://drive.google.com/drive/folders/1XvnJDx63ffhZ_GuZZ0H2_8gZKetMJHpf?usp=drive_link" target="_blank" rel="noopener">ملفات المشروع</a>
+        <a class="vw-btn" href="trial.mp4" target="_blank" rel="noopener">فيديو تجريبي</a>
       </nav>
       <div class="vw-zoom" role="group" aria-label="حجم الصفحة">
         <button type="button" class="vw-btn" data-z="+" aria-label="تكبير">+</button>
