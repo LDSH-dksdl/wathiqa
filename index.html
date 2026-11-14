@@ -1000,6 +1000,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .vw-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--vw-bar); border-bottom: 1px solid var(--vw-line); padding-block: 8px 7px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 6px; }
 .vw-row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+@media (max-width: 640px) { .vw-row { flex-wrap: wrap; row-gap: 8px; } .vw-tabs { flex: 1 1 100%; flex-wrap: wrap; overflow: visible; order: 5; } }
 .vw-brand { flex: none; display: flex; align-items: center; gap: 8px; color: var(--vw-teal); }
 .vw-brand svg { width: 30px; height: 30px; flex: none; }
 .vw-brand b { font-family: var(--vw-display); font-weight: 700; font-size: 14px; line-height: 1.3; color: var(--vw-ink); white-space: nowrap; }
@@ -1364,7 +1365,7 @@ function extraNow(){
 var $=function(s){return document.querySelector(s)};
 var fab=$('#ai-fab'),panel=$('#ai'),gate=$('#ai-gate'),chat=$('#ai-chat'),body=$('#ai-body'),form=$('#ai-form'),q=$('#ai-q'),send=$('#ai-send'),where=$('#ai-where'),codeIn=$('#ai-code'),gerr=$('#ai-gerr'),btnNew=$('#ai-new');
 var mic=$('#ai-mic'),wave=$('#ai-wave'),spk=$('#ai-spk'),wt=$('#ai-wt');
-fab.hidden=false;$("#ai-tools").hidden=false;
+fab.hidden=false;if($("#ai-tools"))$("#ai-tools").hidden=false;
 var code='',hist=[],busy=false,idx=null,ctl=null,histLoaded=false;
 try{code=localStorage.getItem('ai-code')||''}catch(e){}
 
@@ -1539,7 +1540,7 @@ function showList(on){
 }
 listBtn.addEventListener('click',function(){showList()});
 var tools=$('#ai-tools'),fbBox=$('#fb-box'),fbText=$('#fb-text'),fbMsg=$('#fb-msg');
-$('#ai-fbtn').addEventListener('click',function(){
+if($('#ai-fbtn'))$('#ai-fbtn').addEventListener('click',function(){
   if(!code){fab.click();return}
   fbBox.hidden=false;fbMsg.textContent='';fbText.focus();
 });
@@ -1574,8 +1575,18 @@ function enter(){
     else gerr.textContent=(j&&j.error==='off')?'هذا الرمز موقوف.':'الرمز غير صحيح. تأكد منه أو اطلب رمزًا من صاحب الفكرة.';
   }).catch(function(){gerr.textContent='تعذّر الاتصال. تأكد من الشبكة وحاول مرة أخرى.'});
 }
+var HELLO_SET={'الو':1,'الوو':1,'الوه':1,'هلو':1,'هلا':1,'مرحبا':1,'سمعني':1,'سمعاني':1,'سامعني':1,'سامعاني':1,'تسمعني':1,'تسمعيني':1,'تسمعوني':1,'سامعيني':1,'سامعين':1,'تسمعين':1,'الوي':1};
+function isHello(t){var k=norm(t).replace(/[^ء-ي\s]/g,'').replace(/\s+/g,'').trim();return !!HELLO_SET[k]}
 function ask(text,viaVoice){
   text=(text||'').trim();if(!text||busy)return Promise.resolve('');
+  if(text.length<=30&&isHello(text)){
+    var rep='نعم، أسمعك بوضوح. تفضّل، اسألني عن الوثيقة أو عن الصفحة التي أمامك.';
+    var c0=$('#ai-chips');if(c0)c0.remove();
+    var ub0=document.createElement('div');ub0.className='ai-m ai-u';ub0.textContent=text;body.appendChild(ub0);
+    bubble('ai-a','<p>'+esc(rep)+'</p>');
+    hist.push({role:'user',content:text},{role:'assistant',content:rep});saveHist();
+    return Promise.resolve(rep);
+  }
   var c=$('#ai-chips');if(c)c.remove();
   busy=true;send.disabled=true;q.value='';q.style.height='auto';
   var ub=document.createElement('div');ub.className='ai-m ai-u';ub.textContent=text;body.appendChild(ub);
@@ -1696,6 +1707,28 @@ function dictate(){
   stopSpeak();
   listenOnce().then(function(t){if(t){q.value=t;q.focus();q.style.height='auto';q.style.height=Math.min(120,q.scrollHeight)+'px'}}).catch(micDenied);
 }
+function bargeWatch(){
+  var txt='',r=null;
+  try{var R=WS();r=new R();r.lang='ar-SA';r.interimResults=true;r.continuous=true;r.maxAlternatives=1;
+    r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;t=t.trim();
+      if(t.length>=2){txt=t;if(V.speaking)stopSpeak()}};
+    r.onerror=function(){};r.onend=function(){};r.start();
+  }catch(e){r=null}
+  return {done:function(){try{if(r)r.stop()}catch(e){}return Promise.resolve(txt)}};
+}
+function answerAndSpeak(t){
+  return ask(t,true).then(function(ans){
+    if(!conv)return;
+    if(!ans){endConv();return}
+    status('أتكلم…');
+    var bw=V.dict?null:bargeWatch();
+    return speakP(ans).then(function(){return bw?bw.done():''}).then(function(heard){
+      if(!conv)return;
+      if(heard)return answerAndSpeak(heard);
+      return convLoop();
+    });
+  });
+}
 function convLoop(){
   if(!conv)return;
   status('أصغي إليك…');voiceUI();
@@ -1703,12 +1736,7 @@ function convLoop(){
     if(!conv)return;
     if(!t){if(++empty>=2){endConv('لم أسمع شيئًا فأوقفت المحاورة. اضغط الزر لتبدأ من جديد.');return}return convLoop()}
     empty=0;status('أفكّر…');
-    return ask(t,true).then(function(ans){
-      if(!conv)return;
-      if(!ans){endConv();return}
-      status('أتكلم…');
-      return speakP(ans).then(function(){if(conv)convLoop()});
-    });
+    return answerAndSpeak(t);
   }).catch(function(e){if(conv){endConv();micDenied(e)}});
 }
 function startConv(){
