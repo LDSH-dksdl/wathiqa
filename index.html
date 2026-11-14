@@ -1335,7 +1335,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 #ai-tools[hidden],#fb-box[hidden]{display:none!important}
 body.ai-open #ai-tools{display:none}
 .ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-@media (max-width:640px){#ai-fab{width:48px;height:48px;padding:0;justify-content:center;border-radius:50%}#ai-fab span{display:none}#ai-fab svg{width:20px;height:20px}}
 #bar-show{display:none;position:fixed;z-index:65;top:max(10px,env(safe-area-inset-top,0px));inset-inline-end:max(12px,env(safe-area-inset-right,0px));align-items:center;gap:6px;padding:7px 12px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
 @media (max-width:640px){#bar-show:not([hidden]){display:inline-flex}}
 .ai-tool:focus-visible,#fb-box button:focus-visible,#fb-box textarea:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
@@ -1583,7 +1582,7 @@ function preloadDoc(){
 }
 preloadDoc();
 (function(){var bar=document.querySelector('.vw-bar'),btn=document.getElementById('bar-show');if(!bar||!btn)return;
-  function paint(){var h=bar.classList.contains('is-hidden');btn.textContent=h?'القائمة ↓':'إخفاء القائمة ↑'}
+  function paint(){btn.textContent='القائمة'}
   function setHidden(v){bar.classList.toggle('is-hidden',v);paint()}
   var sy=0;
   document.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:true});
