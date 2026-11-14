@@ -1004,7 +1004,12 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   .vw-row { flex-wrap: wrap; row-gap: 8px; width: 100%; }
   .vw-brand { order: 0; }
   .vw-tabs { flex: 1 1 100%; width: 100%; flex-wrap: wrap; overflow: visible; order: 5; justify-content: flex-start; align-content: flex-start; }
-  .vw-zoom { order: 1; margin-inline-end: auto; }
+  .vw-bar { position: relative; }
+  .vw-tabs { margin-top: 40px; }
+  .vw-zoom { position: absolute; inset-inline-end: 12px; inset-inline-start: auto; top: 12px; margin: 0; z-index: 2; }
+  .vw-row { padding-inline-start: 0; }
+  .vw-tabs .vw-btn.warm { border-radius: 16px; border: 2px solid #d9a53a; background: #5a2e12; color: #ffd98a; box-shadow: inset 0 0 0 1px rgba(255,217,138,.35); font-weight: 800; letter-spacing: .4px; }
+  .vw-tabs .vw-btn.warm[aria-current="true"] { background: #d9a53a; color: #3a1d08; }
   .vw-bar { transition: transform .25s ease; }
   .vw-bar.is-hidden { transform: translateY(-100%); }
   .vw-tabs .vw-btn.warm { border-radius: 14px; border-width: 2px; font-weight: 800; letter-spacing: .3px; }
@@ -1576,11 +1581,14 @@ function preloadDoc(){
   }).catch(function(){});
 }
 preloadDoc();
-(function(){var bar=document.querySelector('.vw-bar'),btn=document.getElementById('bar-show');if(!bar||!btn)return;var last=0;
+(function(){var bar=document.querySelector('.vw-bar'),btn=document.getElementById('bar-show');if(!bar||!btn)return;
   function setHidden(v){bar.classList.toggle('is-hidden',v);btn.hidden=!v}
-  document.addEventListener('scroll',function(e){var t=e.target,y=(t===document||t===document.documentElement||t===document.body)?(window.scrollY||document.documentElement.scrollTop||0):(t.scrollTop||0);
-    if(y>last+8&&y>160)setHidden(true);else if(y<last-8)setHidden(false);last=y},{capture:true,passive:true});
-  btn.addEventListener('click',function(){setHidden(false);window.scrollTo({top:0,behavior:'smooth'})});
+  var sy=0;
+  /* اتجاه الإصبع أو العجلة يحدّد الإخفاء والإظهار، لأن مكان التمرير في الوثيقة ليس واحدًا */
+  document.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchmove',function(e){var y=e.touches[0].clientY,d=y-sy;sy=y;if(d<-6)setHidden(true);else if(d>6)setHidden(false)},{passive:true});
+  document.addEventListener('wheel',function(e){if(e.deltaY>6)setHidden(true);else if(e.deltaY<-6)setHidden(false)},{passive:true});
+  btn.addEventListener('click',function(){setHidden(false)});
 })();
 function post(payload,signal){
   return fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:signal});
