@@ -1290,11 +1290,12 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 #tour ul{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:9px}
 #tour li{font-size:15px;line-height:1.75;padding:8px 10px;border-radius:10px;background:#f4f9fa;border:1px solid #e1eded}
 #tour li b{color:#0b4f5c}
-#tour .tn{display:flex;gap:8px;justify-content:space-between;align-items:center}
+#tour .tn{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+#tour .tn .dots{text-align:center}
 #tour .tn button{font:700 14px/1.2 inherit;font-family:inherit;padding:10px 16px;border-radius:10px;border:1px solid #cfe0e3;background:#fff;color:#0b4f5c;cursor:pointer}
 #tour .tn .go{background:#0b4f5c;color:#fff;border-color:#0b4f5c}
 #tour .tn .gold{background:#f2c14e;color:#0b3a44;border-color:#d9a53a}
-#tour .dots{font-size:13px;color:#5a7a80}
+#tour .dots{font-size:13px;color:#5a7a80;white-space:nowrap}
 #tour :focus-visible{outline:2px solid #c0612b;outline-offset:2px}
 </style>
 <div id="tour" hidden role="dialog" aria-modal="true" aria-label="شرح الوثيقة">
@@ -1334,7 +1335,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
     {h:'الجوال والحاسوب',
      items:['<b>على الجوال:</b> الشريط العلوي يختفي عند النزول ويظهر عند الصعود، والأقسام تلتف على أكثر من سطر.',
             '<b>على سطح المكتب:</b> الأقسام كلها في القائمة اليسرى، وتمرّر فيها لترى الباقي.',
-            '<b>للتجربة الأفضل:</b> افتح الوثيقة على الحاسوب إن أمكن.']}
+            '<b>على الجوال للتصميم الكامل:</b> من قائمة المتصفح (النقاط الثلاث) اختر «موقع مصمم للكمبيوتر»، فتظهر القائمة اليسرى كما على الحاسوب.',
+            '<b>على الحاسوب:</b> الأقسام كلها أمامك دون تمرير في الشريط العلوي.']}
   ];
   var cur=0,tour=document.getElementById('tour'),body=document.getElementById('tour-body'),dots=document.getElementById('tour-dots');
   var tabs=tour.querySelectorAll('[role=tab]');
