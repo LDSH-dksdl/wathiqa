@@ -1466,11 +1466,11 @@ init();
 }
 @media (prefers-reduced-motion:reduce){#ai{transition:none}}
 #ai-tools{position:fixed;z-index:60;inset-inline-end:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-#ai-tools[hidden],#fb-box[hidden]{display:none!important}
+#ai-tools[hidden],#fb-box[hidden],#ai-tpanel[hidden]{display:none!important}
+.ai-tpanel{display:flex;flex-direction:column;gap:8px;align-items:flex-end;padding:10px;border-radius:14px;background:var(--vw-bar,#fbfdfd);border:1px solid var(--vw-line,#cfe0e3);box-shadow:0 4px 16px rgba(0,0,0,.2);margin-bottom:8px}
+.ai-tip{margin:0 0 4px;max-width:240px;font-size:13px;line-height:1.7;color:var(--vw-ink,#0b3a44)}
 body.ai-open #ai-tools{display:none}
 .ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-#bar-show{display:none;position:fixed;z-index:65;top:max(10px,env(safe-area-inset-top,0px));inset-inline-end:max(12px,env(safe-area-inset-right,0px));align-items:center;gap:6px;padding:7px 12px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
-@media (max-width:640px){#bar-show:not([hidden]){display:inline-flex}}
 .ai-tool:focus-visible,#fb-box button:focus-visible,#fb-box textarea:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
 .fb-box{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.4)}
 .fb-in{width:min(440px,100%);background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:inherit;font-size:15px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
@@ -1480,7 +1480,6 @@ body.ai-open #ai-tools{display:none}
 .fb-row #fb-send{background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);border-color:transparent}
 </style>
 <button type="button" id="ai-fab" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>AI</span></button>
-<button type="button" id="bar-show" hidden aria-label="إظهار القائمة">القائمة ↓</button>
 
 <div id="fb-box" class="fb-box" hidden role="dialog" aria-label="أرسل فكرة أو مقترحًا"><div class="fb-in"><b>أرسل فكرتك أو مقترحك</b><textarea id="fb-text" maxlength="1000" placeholder="اكتب ملاحظتك أو مقترحك على الوثيقة"></textarea><div class="fb-row"><button type="button" id="fb-cancel">إلغاء</button><button type="button" id="fb-send">إرسال</button></div><p class="ai-note" id="fb-msg" role="status"></p></div></div>
 <aside id="ai" role="dialog" aria-label="مساعد القراءة" aria-modal="false" dir="rtl" lang="ar">
@@ -1690,7 +1689,9 @@ function showList(on){
 }
 listBtn.addEventListener('click',function(){showList()});
 var tools=$('#ai-tools'),fbBox=$('#fb-box'),fbText=$('#fb-text'),fbMsg=$('#fb-msg');
-if($('#ai-fbtn'))$('#ai-fbtn').addEventListener('click',function(){
+if($('#ai-fbtn'))$('#tp-ask').addEventListener('click',function(){$('#ai-tpanel').hidden=true;fab.click()});
+$('#ai-tbtn').addEventListener('click',function(){var pn=$('#ai-tpanel');pn.hidden=!pn.hidden;this.setAttribute('aria-expanded',String(!pn.hidden))});
+$('#ai-fbtn').addEventListener('click',function(){$('#ai-tpanel').hidden=true;
   if(!code){fab.click();return}
   fbBox.hidden=false;fbMsg.textContent='';fbText.focus();
 });
@@ -1715,15 +1716,12 @@ function preloadDoc(){
   }).catch(function(){});
 }
 preloadDoc();
-(function(){var bar=document.querySelector('.vw-bar'),btn=document.getElementById('bar-show');if(!bar||!btn)return;
-  function paint(){btn.textContent='القائمة'}
-  function setHidden(v){bar.classList.toggle('is-hidden',v);paint()}
+(function(){var bar=document.querySelector('.vw-bar');if(!bar)return;
+  function setHidden(v){bar.classList.toggle('is-hidden',v)}
   var sy=0;
   document.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:true});
   document.addEventListener('touchmove',function(e){var y=e.touches[0].clientY,d=y-sy;sy=y;if(d<-6)setHidden(true);else if(d>6)setHidden(false)},{passive:true});
   document.addEventListener('wheel',function(e){if(e.deltaY>6)setHidden(true);else if(e.deltaY<-6)setHidden(false)},{passive:true});
-  btn.hidden=false;paint();
-  btn.addEventListener('click',function(){setHidden(!bar.classList.contains('is-hidden'))});
 })();
 function post(payload,signal){
   return fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:signal});
