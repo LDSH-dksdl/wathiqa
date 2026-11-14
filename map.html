@@ -1412,6 +1412,7 @@ init();
 })();
 </script>
 
+<script>window.WATHIQA_PAGE={extra:"القارئ الآن في صفحة «أين يتغيّر الواقع؟» وهي خريطة حيّة تفاعلية منفصلة عن نص الوثيقة. تُظهر درجات السلّم الخمس عشرة لما يصل فعلًا إلى الناس، ويختار القارئ درجة فيرى ما يحدث عندها. إن سأل القارئ عن «هذه الصفحة» أو «هذه الخريطة» فالمقصود هذه الصفحة، واربط جوابك بنص الوثيقة متى كان له صلة. اذكر رقم الصفحة من الوثيقة حين تستند إليها."};</script>
 <style>
 #ai [hidden],#ai-fab[hidden]{display:none!important}
 #ai-fab{position:fixed;z-index:60;inset-inline-start:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;padding:11px 16px;border:0;border-radius:999px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 14px/1 inherit;font-family:inherit;box-shadow:0 6px 22px rgba(0,0,0,.28);cursor:pointer}
@@ -1467,7 +1468,7 @@ init();
 #ai-tools{position:fixed;z-index:60;inset-inline-end:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;align-items:flex-end}
 #ai-tools[hidden],#fb-box[hidden]{display:none!important}
 body.ai-open #ai-tools{display:none}
-.ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid var(--vw-line,#cfe0e3);border-radius:999px;background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
 .ai-tool:focus-visible,#fb-box button:focus-visible,#fb-box textarea:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
 .fb-box{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.4)}
 .fb-in{width:min(440px,100%);background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:inherit;font-size:15px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
@@ -1730,7 +1731,7 @@ function ask(text,viaVoice){
     var lead=SYS+'\n\nالقارئ الآن عند: '+(where_||'غير معروف')+'\n\n===== مقاطع من الوثيقة =====\n'+ctx.text+'\n===== نهاية المقاطع =====\n\nسؤال القارئ الآن: ';
     var m2=msgs.slice(0,-1).concat([{role:'user',content:lead+text}]);
     return sm(m2,{signal:ctl.signal,cache:false,onText:function(o){acc=o.text;ab.innerHTML=render(acc);body.scrollTop=body.scrollHeight}}).then(function(r){if(r&&r.text)acc=r.text;ab.innerHTML=render(acc)});
-  })):(post({code:code,messages:msgs,context:ctx.text,where:where_,extra:EXTRA},ctl.signal).then(function(r){
+  })):(post({code:code,messages:msgs,context:ctx.text,where:where_,extra:(window.WATHIQA_PAGE&&window.WATHIQA_PAGE.extra)||EXTRA},ctl.signal).then(function(r){
     if(!r.ok||!r.body){return r.json().catch(function(){return {}}).then(function(j){throw j||{}})}
     var rd=r.body.getReader(),dec=new TextDecoder('utf-8'),buf='';
     function pump(){return rd.read().then(function(x){
