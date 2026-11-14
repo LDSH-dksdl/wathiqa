@@ -1302,6 +1302,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ai-gate input{border:1px solid var(--vw-line,#cfe0e3);border-radius:10px;padding:11px 12px;background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);font:16px/1.4 inherit;font-family:inherit;direction:ltr;text-align:center;letter-spacing:.06em}
 .ai-gate .ai-go{border:0;border-radius:10px;padding:12px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 15px/1 inherit;font-family:inherit;cursor:pointer}
 .ai-note{font-size:12.5px;color:var(--vw-ink2,#4a646b)}
+.ai-convs{max-height:40vh;overflow-y:auto;border-bottom:1px solid var(--vw-line,#cfe0e3);padding:8px 10px;display:flex;flex-direction:column;gap:6px;background:var(--vw-bar,#fbfdfd)}
+.ai-cv{display:flex;align-items:center;gap:6px;border:1px solid var(--vw-line,#cfe0e3);border-radius:10px;padding:6px 8px;background:var(--vw-chip,#eef5f6)}
+.ai-cv.on{border-color:var(--vw-act,#0b4f5c);box-shadow:inset 0 0 0 1px var(--vw-act,#0b4f5c)}
+.ai-cv-open{flex:1;min-width:0;text-align:start;border:0;background:transparent;color:var(--vw-ink,#0b3a44);font:600 14px/1.6 inherit;font-family:inherit;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-cv button:not(.ai-cv-open){border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);border-radius:7px;padding:3px 9px;font:600 12px/1.5 inherit;font-family:inherit;cursor:pointer;flex:none}
 @media (max-width:640px){
  #ai{top:auto;left:0;right:0;width:100%;height:84dvh;height:84vh;border-radius:18px 18px 0 0;border-inline-end:0;border-top:1px solid var(--vw-line,#cfe0e3);transform:translateY(105%)}
  #ai.on{transform:none}
@@ -1311,7 +1316,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 </style>
 <button type="button" id="ai-fab" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>اسأل المساعد</span></button>
 <aside id="ai" role="dialog" aria-label="مساعد القراءة" aria-modal="false" dir="rtl" lang="ar">
- <div class="ai-h"><b>مساعد القراءة</b><button type="button" id="ai-new" hidden>محادثة جديدة</button><button type="button" id="ai-close" aria-label="إغلاق">إغلاق</button></div>
+ <div class="ai-h"><b>مساعد القراءة</b><button type="button" id="ai-list" hidden>محادثاتي</button><button type="button" id="ai-new" hidden>محادثة جديدة</button><button type="button" id="ai-close" aria-label="إغلاق">إغلاق</button></div>
  <div id="ai-gate" class="ai-gate" hidden>
   <p><b>هذا المساعد لمن عنده رمز دعوة.</b></p>
   <p class="ai-note">يقرأ معك الوثيقة، ويجيب عن أسئلتك منها، ويكمل الحوار معك. اكتب الرمز الذي أعطاك إياه صاحب الفكرة.</p>
@@ -1321,7 +1326,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
  </div>
  <div id="ai-chat" style="display:none;flex:1;min-height:0;flex-direction:column">
   <div class="ai-where" id="ai-where"><span id="ai-wt"></span><button type="button" id="ai-spk" hidden></button></div>
-  <div class="ai-body" id="ai-body" aria-live="polite"></div>
+  <div id="ai-convs" class="ai-convs" hidden></div><div class="ai-body" id="ai-body" aria-live="polite"></div>
   <form class="ai-f" id="ai-form"><textarea id="ai-q" rows="1" placeholder="اكتب سؤالك أو تكلّم" aria-label="سؤالك"></textarea><button type="button" class="ai-ic" id="ai-mic" hidden aria-label="إملاء بالصوت" title="إملاء بالصوت"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button type="button" class="ai-ic" id="ai-wave" hidden aria-label="محاورة صوتية" title="محاورة صوتية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></button><button type="submit" id="ai-send">أرسل</button></form>
  </div>
 </aside>
@@ -1428,25 +1433,88 @@ function open(){
 }
 function close(){endConv();stopListen();stopSpeak();panel.classList.remove('on');document.body.classList.remove('ai-open');if(ctl){try{ctl.abort()}catch(e){}}fab.focus()}
 function showGate(){gate.hidden=false;chat.style.display='none';btnNew.hidden=true;setTimeout(function(){codeIn.focus()},60)}
+/* ——— المحادثات المتعددة: تُحفظ على الخادم، بحدّ عشر محادثات ——— */
+var convs=[],curId=null,listBtn=$('#ai-list');
+function nid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function cur(){for(var i=0;i<convs.length;i++)if(convs[i].id===curId)return convs[i];return null}
+function titleOf(c){if(c.title)return c.title;var f=(c.messages||[]).filter(function(m){return m.role==='user'})[0];return f?f.content.slice(0,40):'محادثة جديدة'}
+function fmtDate(t){try{return new Date(t).toLocaleDateString('ar',{day:'numeric',month:'short'})}catch(e){return ''}}
+function persist(){if(SAMPLE||!code)return;post({code:code,save:true,convs:convs}).catch(function(){})}
+function paintHist(){
+  body.innerHTML='';
+  if(!hist.length){bubble('ai-a','<p>أهلًا بك. أقرأ معك هذه الوثيقة وأجيب من نصها. اسألني عن الصفحة المفتوحة أو عن أي جزء، وسأكمل معك الحوار.</p>');chips()}
+  else hist.forEach(function(x){
+    if(x.role==='user'){var u=document.createElement('div');u.className='ai-m ai-u';u.textContent=x.content;body.appendChild(u)}
+    else bubble('ai-a',render(x.content));
+  });
+  body.scrollTop=body.scrollHeight;
+}
+function saveHist(){
+  var c=cur();
+  if(!c){c={id:nid(),title:'',updated:0,messages:[]};convs.unshift(c);curId=c.id}
+  c.messages=hist.slice(-20);c.updated=Date.now();
+  convs.sort(function(a,b){return b.updated-a.updated});
+  convs=convs.slice(0,10);
+  persist();
+}
 function loadHist(){
   histLoaded=true;
   post({code:code,hist:true}).then(function(r){return r.json().catch(function(){return {}})}).then(function(j){
-    var m=(j&&j.messages)||[];if(!m.length||body.querySelector('.ai-u,.ai-a:not(.ai-err)')&&hist.length)return;
-    var welcome=$('#ai-chips');body.innerHTML='';hist=m.slice(-20);
-    hist.forEach(function(x){
-      if(x.role==='user'){var u=document.createElement('div');u.className='ai-m ai-u';u.textContent=x.content;body.appendChild(u)}
-      else bubble('ai-a',render(x.content));
-    });
-    body.scrollTop=body.scrollHeight;
+    var list=(j&&j.convs)||[];
+    if(!list.length||hist.length)return;
+    convs=list;curId=convs[0].id;hist=(convs[0].messages||[]).slice(0);
+    paintHist();showList(false);
   }).catch(function(){});
 }
-function saveHist(){if(SAMPLE||!code)return;post({code:code,save:hist.slice(-20)}).catch(function(){})}
 function showChat(){
-  gate.hidden=true;chat.style.display='flex';btnNew.hidden=false;showWhere();
-  if(!body.children.length){bubble('ai-a','<p>أهلًا بك. أقرأ معك هذه الوثيقة وأجيب من نصها. اسألني عن الصفحة المفتوحة أو عن أي جزء، وسأكمل معك الحوار.</p>');chips()}
-  if(!SAMPLE&&!histLoaded)loadHist();
+  gate.hidden=true;chat.style.display='flex';btnNew.hidden=false;listBtn.hidden=false;showWhere();
+  if(!histLoaded&&!SAMPLE)loadHist();
+  if(!body.children.length)paintHist();
   setTimeout(function(){q.focus()},60);
 }
+function newConv(){
+  endConv();stopListen();stopSpeak();if(ctl){try{ctl.abort()}catch(e){}}
+  busy=false;send.disabled=false;
+  saveHist();
+  convs.unshift({id:nid(),title:'',updated:Date.now(),messages:[]});curId=convs[0].id;hist=[];
+  convs=convs.slice(0,10);
+  persist();paintHist();showList(false);
+}
+function switchConv(id){
+  if(id===curId){showList(false);return}
+  endConv();stopListen();stopSpeak();if(ctl){try{ctl.abort()}catch(e){}}
+  busy=false;send.disabled=false;
+  saveHist();
+  var c=null;convs.forEach(function(x){if(x.id===id)c=x});if(!c)return;
+  curId=id;hist=(c.messages||[]).slice(0);paintHist();showList(false);
+}
+function deleteConv(id){
+  if(!confirm('نحذف هذه المحادثة نهائيًا؟'))return;
+  convs=convs.filter(function(x){return x.id!==id});
+  if(id===curId){curId=null;hist=[];if(convs.length){curId=convs[0].id;hist=(convs[0].messages||[]).slice(0)}paintHist()}
+  persist();showList(true);
+}
+function renameConv(id){
+  var c=null;convs.forEach(function(x){if(x.id===id)c=x});if(!c)return;
+  var t=prompt('اسم المحادثة',titleOf(c));
+  if(t&&t.trim()){c.title=t.trim().slice(0,60);persist();showList(true)}
+}
+function showList(on){
+  var box=$('#ai-convs');if(!box)return;
+  if(on===undefined)on=box.hidden;
+  if(!on){box.hidden=true;return}
+  box.innerHTML='';box.hidden=false;
+  if(!convs.length){var e=document.createElement('p');e.className='ai-note';e.textContent='لا توجد محادثات محفوظة بعد.';box.appendChild(e);return}
+  convs.forEach(function(c){
+    var row=document.createElement('div');row.className='ai-cv'+(c.id===curId?' on':'');
+    var a=document.createElement('button');a.type='button';a.className='ai-cv-open';a.textContent=titleOf(c);a.title=fmtDate(c.updated);
+    a.addEventListener('click',function(){switchConv(c.id)});
+    var r=document.createElement('button');r.type='button';r.textContent='تسمية';r.setAttribute('aria-label','تسمية المحادثة');r.addEventListener('click',function(){renameConv(c.id)});
+    var d=document.createElement('button');d.type='button';d.textContent='حذف';d.setAttribute('aria-label','حذف المحادثة');d.addEventListener('click',function(){deleteConv(c.id)});
+    row.appendChild(a);row.appendChild(r);row.appendChild(d);box.appendChild(row);
+  });
+}
+listBtn.addEventListener('click',function(){showList()});
 function post(payload,signal){
   return fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:signal});
 }
@@ -1625,10 +1693,32 @@ codeIn.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefau
 form.addEventListener('submit',function(e){e.preventDefault();ask(q.value)});
 q.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask(q.value)}});
 q.addEventListener('input',function(){q.style.height='auto';q.style.height=Math.min(120,q.scrollHeight)+'px'});
-btnNew.addEventListener('click',function(){endConv();stopListen();stopSpeak();if(ctl){try{ctl.abort()}catch(e){}}hist=[];saveHist();body.innerHTML='';busy=false;send.disabled=false;showChat()});
+btnNew.addEventListener('click',newConv);
 body.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ai-pg');if(b)goPage(+b.dataset.pg)});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('on'))close()});
 window.addEventListener('scroll',function(){if(panel.classList.contains('on')&&!gate.hidden===false){}if(panel.classList.contains('on'))showWhere()},{passive:true});
+})();
+</script>
+
+<style>
+#doc-note{position:fixed;z-index:85;top:max(10px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--vw-warm-bg,#fdf1e7);border:1px solid var(--vw-warm-line,#efcdb2);color:var(--vw-ink,#0b3a44);box-shadow:0 8px 24px rgba(0,0,0,.25);font:14px/1.7 inherit;font-family:inherit;direction:rtl}
+#doc-note[hidden]{display:none!important}
+#doc-note b{display:block;margin-bottom:2px;color:var(--vw-warm,#b4541a)}
+#doc-note span{flex:1;min-width:0}
+#doc-note button{flex:none;border:0;border-radius:8px;padding:6px 12px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 13px/1 inherit;font-family:inherit;cursor:pointer}
+</style>
+<div id="doc-note" hidden role="status"><span><b>تم تحديث الوثيقة</b><span id="doc-note-t"></span></span><button type="button" id="doc-note-ok">فهمت</button></div>
+<script>
+(function(){
+  var VER="2026-11-14-1", NOTE="حُدّثت الوثيقة الليلة. آخر التغييرات: إضافة مساعد القراءة، وشريحة سطح المكتب في صفحة المعرفة الإنسانية.";
+  var box=document.getElementById('doc-note');if(!box||!VER)return;
+  var K='doc-ver';
+  try{
+    var seen=localStorage.getItem(K);
+    localStorage.setItem(K,VER);
+    if(seen&&seen!==VER&&NOTE){document.getElementById('doc-note-t').textContent=' — '+NOTE;box.hidden=false}
+  }catch(e){}
+  document.getElementById('doc-note-ok').addEventListener('click',function(){box.hidden=true});
 })();
 </script>
 </body></html>
