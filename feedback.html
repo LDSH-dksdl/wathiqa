@@ -1,0 +1,37 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>الأفكار والمقترحات</title>
+<style>
+:root{color-scheme:light dark;--bg:#f4f8f9;--fg:#0b3a44;--card:#fff;--line:#cfe0e3;--act:#0b4f5c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1f23;--fg:#e6f2f4;--card:#132a2f;--line:#244349;--act:#5fb3c0}}
+:root[data-theme="dark"]{--bg:#0d1f23;--fg:#e6f2f4;--card:#132a2f;--line:#244349;--act:#5fb3c0}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.8 system-ui,sans-serif;padding:16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+h1{font-size:20px;margin:0 0 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input{flex:1;min-width:160px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+button{padding:9px 16px;border:0;border-radius:8px;background:var(--act);color:#fff;font:600 14px inherit;cursor:pointer}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.meta{font-size:13px;opacity:.75;margin-bottom:4px}
+.msg{white-space:pre-wrap;margin:0}
+</style></head><body>
+<h1>الأفكار والمقترحات الواردة</h1>
+<div class="row"><input id="code" type="text" placeholder="رمز الإدارة" autocomplete="off"><button id="go">عرض</button></div>
+<p id="status" role="status"></p>
+<div id="list"></div>
+<script>
+var URL_='https://wathiqa-assistant.dbyan5919.workers.dev';
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+$('#go').addEventListener('click',function(){
+  var c=$('#code').value.trim();if(!c)return;
+  $('#status').textContent='جارٍ التحميل…';$('#list').innerHTML='';
+  fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c,fbList:true})})
+  .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {ok:r.ok,j:j}})})
+  .then(function(x){
+    if(!x.ok){$('#status').textContent=x.j.error==='forbidden'?'هذا الرمز ليس رمز إدارة.':'تعذّر التحميل.';return}
+    var items=x.j.items||[];
+    $('#status').textContent='عدد الرسائل: '+items.length;
+    $('#list').innerHTML=items.map(function(it){
+      return '<div class="item"><div class="meta">'+esc(it.who||'قارئ')+' · '+esc(new Date(it.t).toLocaleString('ar'))+'</div><p class="msg">'+esc(it.text)+'</p></div>';
+    }).join('');
+  }).catch(function(){$('#status').textContent='تعذّر الاتصال.'});
+});
+</script></body></html>
