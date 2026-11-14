@@ -1166,7 +1166,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
     Array.prototype.forEach.call(document.querySelectorAll('.vw-seg .vw-btn'), function (b) { b.setAttribute('aria-pressed', b.dataset.o === order ? 'true' : 'false'); });
     var n = pages().filter(function (p) { return !p.hidden; }).length;
     var txt;
-    if (mode === 'home') txt = 'اختر طريقك من الصفحة الأولى، أو من الأزرار في الأعلى.';
+    if (mode === 'home') txt = 'اختر طريقك من الصفحة الأولى، أو من الأزرار في الأعلى.' + (window.matchMedia('(max-width: 640px)').matches ? ' للتجربة الأوسع افتح الوثيقة على الحاسوب، فتجد الأقسام في القائمة اليسرى، ومرّر فيها لترى الباقي.' : '');
     else if (mode === 'idea') txt = '<b>الفكرة في صفحة واحدة:</b> الفكرة كلها في سبع بطاقات، من السؤال إلى أين تقف.';
     else if (mode === 'short') txt = '<b>المسار القصير:</b> من كل قسم «باختصار» وفقراته «الأهم» · ' + n + ' صفحات.';
     else if (mode === 'decision') txt = '<b>الختام:</b> ما مرّ بك، ثم القرار · صفحتان.';
@@ -1335,6 +1335,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 #ai-tools[hidden],#fb-box[hidden]{display:none!important}
 body.ai-open #ai-tools{display:none}
 .ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+@media (max-width:640px){#ai-fab{width:48px;height:48px;padding:0;justify-content:center;border-radius:50%}#ai-fab span{display:none}#ai-fab svg{width:20px;height:20px}}
 #bar-show{display:none;position:fixed;z-index:65;top:max(10px,env(safe-area-inset-top,0px));inset-inline-end:max(12px,env(safe-area-inset-right,0px));align-items:center;gap:6px;padding:7px 12px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
 @media (max-width:640px){#bar-show:not([hidden]){display:inline-flex}}
 .ai-tool:focus-visible,#fb-box button:focus-visible,#fb-box textarea:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
@@ -1582,13 +1583,14 @@ function preloadDoc(){
 }
 preloadDoc();
 (function(){var bar=document.querySelector('.vw-bar'),btn=document.getElementById('bar-show');if(!bar||!btn)return;
-  function setHidden(v){bar.classList.toggle('is-hidden',v);btn.hidden=!v}
+  function paint(){var h=bar.classList.contains('is-hidden');btn.textContent=h?'القائمة ↓':'إخفاء القائمة ↑'}
+  function setHidden(v){bar.classList.toggle('is-hidden',v);paint()}
   var sy=0;
-  /* اتجاه الإصبع أو العجلة يحدّد الإخفاء والإظهار، لأن مكان التمرير في الوثيقة ليس واحدًا */
   document.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:true});
   document.addEventListener('touchmove',function(e){var y=e.touches[0].clientY,d=y-sy;sy=y;if(d<-6)setHidden(true);else if(d>6)setHidden(false)},{passive:true});
   document.addEventListener('wheel',function(e){if(e.deltaY>6)setHidden(true);else if(e.deltaY<-6)setHidden(false)},{passive:true});
-  btn.addEventListener('click',function(){setHidden(false)});
+  btn.hidden=false;paint();
+  btn.addEventListener('click',function(){setHidden(!bar.classList.contains('is-hidden'))});
 })();
 function post(payload,signal){
   return fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:signal});
