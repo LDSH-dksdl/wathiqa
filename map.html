@@ -370,6 +370,7 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
 .tourbtn{background:var(--gold);color:var(--gold-ink);border-color:var(--gold);font:800 13.5px var(--font-d);padding:6px 16px;text-decoration:none;display:inline-block;box-shadow:0 0 0 3px rgba(230,184,74,.18)}
 .tourbtn:hover{filter:brightness(1.08)}
 .tourgo{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.wbox .wact.wact3{flex-wrap:wrap}
 
 .wel{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:14px;background:rgba(2,10,12,.86)}
 .wel[hidden]{display:none}
@@ -580,7 +581,7 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
         <button class="wsb warn" type="button" data-go="7"><span class="hn w">!</span><span><b>النقل</b>تحذير: الشكل يُنسخ والوظيفة لا تُنسخ. ماذا ينفع حين ننقل ما نجح من مكان إلى آخر؟</span></button>
         <button class="wsb" type="button" data-go="8"><span class="hn e"></span><span><b>الخلاصة</b>الاكتشافات الخمسة والتحذيران معًا، ثم الفجوة التي يقف عندها المشروع: ثلاث محطات لم تقطعها أي تجربة.</span></button>
       </div>
-      <div class="wact"><button class="btn pri big" id="wgo" type="button">ابدأ من البداية</button><button class="btn big" id="wback2" type="button">→ رجوع</button></div>
+      <div class="wact wact3"><button class="btn pri big" id="wnext3" type="button">التالي: جولة مشاهدة تجريبية ←</button><button class="btn big" id="wgo" type="button">ابدأ من البداية</button><button class="btn big" id="wback2" type="button">→ رجوع</button></div>
     </div>
     <div class="wscr" id="w4" hidden>
       <h2>جولة مشاهدة تجريبية</h2>
@@ -1317,6 +1318,7 @@ function init(){
   $('#wback1').addEventListener('click', function(){ wscr(1); });
   $('#wback2').addEventListener('click', function(){ wscr(2); });
   $('#wback3').addEventListener('click', function(){ wscr(3); });
+  $('#wnext3').addEventListener('click', function(){ wscr(4); });
   $('#wclose').addEventListener('click', function(){ hideWelcome(true); });
   $$('#welcome .wtab').forEach(function(b){ b.addEventListener('click', function(){ wscr(+b.dataset.t); }); });
   $$('#welcome .wjump button').forEach(function(b){ b.addEventListener('click', function(){ var g = document.getElementById(b.dataset.j); if (g) g.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'}); }); });
