@@ -1080,7 +1080,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
         <button type="button" class="vw-btn warm" data-m="decision">القرار</button>
         <a class="vw-btn gold" href="map.html" target="_blank" rel="noopener">التجارب العالمية</a>
         <a class="vw-btn" href="https://drive.google.com/drive/folders/1XvnJDx63ffhZ_GuZZ0H2_8gZKetMJHpf?usp=drive_link" target="_blank" rel="noopener">ملفات المشروع</a>
-        <a class="vw-btn" href="trial.mp4" target="_blank" rel="noopener">فيديو تجريبي</a>
+        <a class="vw-btn" href="project-video.mp4" target="_blank" rel="noopener">فيديو المشروع</a>
       </nav>
       <div class="vw-zoom" role="group" aria-label="حجم الصفحة">
         <button type="button" class="vw-btn" data-z="+" aria-label="تكبير">+</button>
@@ -1327,7 +1327,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
             '<b>القرار:</b> ما المطلوب منك، في صفحة واحدة.',
             '<b>التجارب العالمية:</b> صفحة «أين يتغيّر الواقع؟»، وفيها مساعد خاص بها.',
             '<b>ملفات المشروع:</b> مجلد الملفات على درايف، يُفتح في نافذة جديدة.',
-            '<b>فيديو تجريبي:</b> فيديو قصير لتجربة الصوت والصورة.']},
+            '<b>فيديو المشروع:</b> فيديو قصير عن المشروع.']},
     {h:'أدوات القراءة',
      items:['<b>أدوات:</b> زر في أسفل الشاشة، يفتح الخيارات التالية.',
             '<b>اسأل المساعد:</b> يجيب عن أسئلتك من نص الوثيقة، ويذكر رقم الصفحة. يحتاج رمز دعوة.',
@@ -1584,7 +1584,7 @@ function loadHist(){
   post({code:code,hist:true}).then(function(r){return r.json().catch(function(){return {}})}).then(function(j){
     var list=(j&&j.convs)||[];
     if(!list.length||hist.length)return;
-    convs=list;curId=convs[0].id;hist=(convs[0].messages||[]).slice(0);
+    convs=list;curId=null;hist=[];
     paintHist();showList(false);
   }).catch(function(){});
 }
@@ -1828,7 +1828,7 @@ function answerAndSpeak(t){
     if(!conv)return;
     if(!ans){endConv();return}
     status('أتكلم…');
-    var bw=V.dict?null:bargeWatch();
+    var bw=(V.dict||window.matchMedia('(max-width: 640px)').matches)?null:bargeWatch();
     return speakP(ans).then(function(){return bw?bw.done():''}).then(function(heard){
       if(!conv)return;
       if(heard)return answerAndSpeak(heard);
