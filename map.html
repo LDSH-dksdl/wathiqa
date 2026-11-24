@@ -367,17 +367,14 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
 
 /* ---------- شاشة البداية والتنبيه إلى الخطوة التالية ---------- */
 .hbtn{color:var(--gold);border-color:rgba(230,184,74,.6)}
+.tourbtn{background:var(--gold);color:var(--gold-ink);border-color:var(--gold);font:800 13.5px var(--font-d);padding:6px 16px;text-decoration:none;display:inline-block;box-shadow:0 0 0 3px rgba(230,184,74,.18)}
+.tourbtn:hover{filter:brightness(1.08)}
+.tourgo{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+
 .wel{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:14px;background:rgba(2,10,12,.86)}
 .wel[hidden]{display:none}
 .wbox{width:min(900px,100%);max-height:calc(100vh - 28px);overflow:auto;background:var(--panel);border:1px solid var(--gold);border-radius:20px;padding:0 clamp(16px,3.4vw,32px) 24px;box-shadow:0 18px 60px rgba(0,0,0,.5)}
 .wkick{display:inline-block;font:600 12px var(--font-d);color:var(--gold);border:1px solid rgba(230,184,74,.4);border-radius:999px;padding:2px 12px}
-.wtour{display:flex;align-items:center;gap:14px;margin:6px 0 4px;padding:12px 16px;border:1px solid var(--gold);border-radius:14px;background:rgba(230,184,74,.07);color:var(--fg);text-decoration:none}
-.wtour:hover,.wtour:focus-visible{background:rgba(230,184,74,.15);outline:none}
-.wtour-ic{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;font-size:16px;padding-inline-start:3px}
-.wtour-tx{flex:1;min-width:0;font:400 14px/1.75 var(--font-b);color:var(--fg-2)}
-.wtour-tx b{display:block;font:800 16px/1.5 var(--font-d);color:var(--gold)}
-.wtour-go{flex:0 0 auto;font:700 14px var(--font-d);color:var(--gold);white-space:nowrap}
-@media (max-width:760px){.wtour{gap:10px;padding:10px 12px}.wtour-go{display:none}.wtour-tx{font-size:13.5px;line-height:1.7}.wtour-tx b{font-size:15px}}
 .wbox h2{margin:10px 0 4px;font:800 clamp(24px,4.6vw,34px)/1.4 var(--font-d);color:var(--fg)}
 .wlead{margin:0 0 12px;font-size:16px;line-height:1.9;color:var(--fg)}
 .wdef{margin:0 0 14px;padding:10px 14px;border:1px dashed rgba(230,184,74,.55);border-radius:12px;background:rgba(230,184,74,.07);font-size:14px;line-height:1.9;color:var(--fg-2)}
@@ -448,7 +445,7 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
 .part>.shot,.part>.shots2{justify-self:start}
 .part.stack>.shot{justify-self:center}
 @media (max-width:760px){
-  .wtabs{gap:6px;flex-wrap:nowrap;padding:10px 0 8px}
+  .wtabs{gap:6px;flex-wrap:wrap;padding:10px 0 8px}
   .wtab{padding:3px 8px 3px 6px;gap:5px;font-size:12px;white-space:nowrap}
   .wtab b{width:18px;height:18px;font-size:10.5px}
   .wclose{width:30px;height:30px}
@@ -467,7 +464,7 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
       <h1>أين يتغيّر الواقع؟</h1>
       <p class="sub">خريطة حيّة للأنظمة كلها: اختر درجة من السلّم، وانظر ماذا يصل إلى الناس.</p>
     </div>
-    <div class="tools"><a class="snd hbtn" id="guidebtn" href="guide.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">▶ شاهد الشرح</a><button class="snd hbtn" id="helpbtn" type="button">؟ كيف أتعامل مع الصفحة</button><button class="snd" id="snd" type="button" aria-pressed="true">♪ الصوت: يعمل</button><span class="corner">خريطة توضيحية عامة · الأرقام افتراضية</span></div>
+    <div class="tools"><a class="snd hbtn tourbtn" id="guidebtn" href="guide.html" target="_blank" rel="noopener">▶ جولة مشاهدة تجريبية</a><button class="snd hbtn" id="helpbtn" type="button">؟ كيف أتعامل مع الصفحة</button><button class="snd" id="snd" type="button" aria-pressed="true">♪ الصوت: يعمل</button><span class="corner">خريطة توضيحية عامة · الأرقام افتراضية</span></div>
   </header>
 
 
@@ -545,13 +542,9 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
       <button class="wtab on" type="button" role="tab" data-t="1" aria-selected="true"><b>١</b><span class="wt-l">ما هذه الصفحة؟</span><span class="wt-s">الصفحة</span></button>
       <button class="wtab" type="button" role="tab" data-t="2" aria-selected="false"><b>٢</b><span class="wt-l">شاشتك بالصور</span><span class="wt-s">الشاشة</span></button>
       <button class="wtab" type="button" role="tab" data-t="3" aria-selected="false"><b>٣</b><span class="wt-l">الأقسام التسعة</span><span class="wt-s">الأقسام</span></button>
+      <button class="wtab" type="button" role="tab" data-t="4" aria-selected="false"><b>٤</b><span class="wt-l">جولة مشاهدة تجريبية</span><span class="wt-s">الجولة</span></button>
       <button class="wclose" id="wclose" type="button" aria-label="إغلاق الشرح والبدء">×</button>
     </div>
-    <a class="wtour" href="guide.html" target="_blank" rel="noopener">
-      <span class="wtour-ic" aria-hidden="true">▶</span>
-      <span class="wtour-tx"><b>جولة مشاهدة كاملة</b>فيديو يمرّ على كل ما في هذه الصفحة ويشرحه، ويتحرك وحده. توقفه بأي لحظة، أو اختر فصلًا من القائمة.</span>
-      <span class="wtour-go">شاهدها ↗</span>
-    </a>
     <div class="wscr" id="w1">
       <span class="wkick">خريطة حيّة · الأرقام افتراضية للتوضيح</span>
       <h2 id="wtitle">أين يتغيّر الواقع؟</h2>
@@ -588,6 +581,17 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
         <button class="wsb" type="button" data-go="8"><span class="hn e"></span><span><b>الخلاصة</b>الاكتشافات الخمسة والتحذيران معًا، ثم الفجوة التي يقف عندها المشروع: ثلاث محطات لم تقطعها أي تجربة.</span></button>
       </div>
       <div class="wact"><button class="btn pri big" id="wgo" type="button">ابدأ من البداية</button><button class="btn big" id="wback2" type="button">→ رجوع</button></div>
+    </div>
+    <div class="wscr" id="w4" hidden>
+      <h2>جولة مشاهدة تجريبية</h2>
+      <p class="wlead">فيديو يمرّ على الصفحة كلها ويشرحها أمامك، وهي تتحرك وحدها، ومدته نحو ٤٠ دقيقة في ١١ فصلًا. لا تحتاج أن تضغط شيئًا: شغّلها وتابع.</p>
+      <ol class="wsteps">
+        <li><span class="hn">١</span><span><b>المقدمة</b>شاشات الترحيب الثلاث، ثم جولة في الشاشة: الأزرار العلوية، وشريط الأقسام، والخريطة، والعدّادان، ولوحة التوجيه، وسلّم الدرجات الاثنتي عشرة.</span></li>
+        <li><span class="hn">٢</span><span><b>الأقسام التسعة</b>كل قسم فصل مستقل فيه مشاهده كلها، وورقة القراءة الخاصة به، وبطاقات تجاربه.</span></li>
+        <li><span class="hn">٣</span><span><b>الخلاصة</b>ما بقي لنا، وما لا نبني عليه، وبطاقة الختام «والآن جرّب بنفسك».</span></li>
+      </ol>
+      <p class="wnote"><b>كيف تتحكم فيها:</b> الشرح مكتوب أسفل الشاشة، ومعه رنّات هادئة. مفتاح «التشغيل المتواصل» يحدد الطريقة: إذا كان يعمل تنتقل الجولة لوحدها من فصل إلى فصل، وإذا أطفأته تختار الفصل التالي بنفسك. وتقدر توقف الفيديو، أو ترجع بالشريط، أو تقفز إلى أي فصل من القائمة.</p>
+      <div class="wact"><a class="btn pri big tourgo" id="wtourgo" href="guide.html" target="_blank" rel="noopener">▶ ابدأ الجولة التجريبية</a><button class="btn big" id="wback3" type="button">→ رجوع</button></div>
     </div>
   </div>
 </div>
@@ -1268,10 +1272,10 @@ function armIdle(){
   }, 9000);
 }
 function wscr(n){
-  [1, 2, 3].forEach(function(i){ $('#w' + i).hidden = i !== n; });
+  [1, 2, 3, 4].forEach(function(i){ $('#w' + i).hidden = i !== n; });
   $$('#welcome .wtab').forEach(function(b){ var on = +b.dataset.t === n; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
   $('.wbox').classList.toggle('is2', n === 2);
-  try { $('.wbox').scrollTop = 0; $(n === 1 ? '#wnext' : n === 2 ? '#wnext2' : '#wgo').focus({preventScroll:true}); } catch (e) {}
+  try { $('.wbox').scrollTop = 0; $(n === 1 ? '#wnext' : n === 2 ? '#wnext2' : n === 4 ? '#wtourgo' : '#wgo').focus({preventScroll:true}); } catch (e) {}
 }
 function showWelcome(){ lastFocus = document.activeElement; $('#welcome').hidden = false; wscr(1); }
 function hideWelcome(go){
@@ -1312,6 +1316,7 @@ function init(){
   $('#wnext2').addEventListener('click', function(){ wscr(3); });
   $('#wback1').addEventListener('click', function(){ wscr(1); });
   $('#wback2').addEventListener('click', function(){ wscr(2); });
+  $('#wback3').addEventListener('click', function(){ wscr(3); });
   $('#wclose').addEventListener('click', function(){ hideWelcome(true); });
   $$('#welcome .wtab').forEach(function(b){ b.addEventListener('click', function(){ wscr(+b.dataset.t); }); });
   $$('#welcome .wjump button').forEach(function(b){ b.addEventListener('click', function(){ var g = document.getElementById(b.dataset.j); if (g) g.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'}); }); });
