@@ -371,6 +371,13 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
 .wel[hidden]{display:none}
 .wbox{width:min(900px,100%);max-height:calc(100vh - 28px);overflow:auto;background:var(--panel);border:1px solid var(--gold);border-radius:20px;padding:0 clamp(16px,3.4vw,32px) 24px;box-shadow:0 18px 60px rgba(0,0,0,.5)}
 .wkick{display:inline-block;font:600 12px var(--font-d);color:var(--gold);border:1px solid rgba(230,184,74,.4);border-radius:999px;padding:2px 12px}
+.wtour{display:flex;align-items:center;gap:14px;margin:6px 0 4px;padding:12px 16px;border:1px solid var(--gold);border-radius:14px;background:rgba(230,184,74,.07);color:var(--fg);text-decoration:none}
+.wtour:hover,.wtour:focus-visible{background:rgba(230,184,74,.15);outline:none}
+.wtour-ic{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;font-size:16px;padding-inline-start:3px}
+.wtour-tx{flex:1;min-width:0;font:400 14px/1.75 var(--font-b);color:var(--fg-2)}
+.wtour-tx b{display:block;font:800 16px/1.5 var(--font-d);color:var(--gold)}
+.wtour-go{flex:0 0 auto;font:700 14px var(--font-d);color:var(--gold);white-space:nowrap}
+@media (max-width:760px){.wtour{gap:10px;padding:10px 12px}.wtour-go{display:none}.wtour-tx{font-size:13.5px;line-height:1.7}.wtour-tx b{font-size:15px}}
 .wbox h2{margin:10px 0 4px;font:800 clamp(24px,4.6vw,34px)/1.4 var(--font-d);color:var(--fg)}
 .wlead{margin:0 0 12px;font-size:16px;line-height:1.9;color:var(--fg)}
 .wdef{margin:0 0 14px;padding:10px 14px;border:1px dashed rgba(230,184,74,.55);border-radius:12px;background:rgba(230,184,74,.07);font-size:14px;line-height:1.9;color:var(--fg-2)}
@@ -540,6 +547,11 @@ h1{margin:0;font:800 clamp(24px,3.4vw,32px)/1.4 var(--font-d);color:var(--fg)}
       <button class="wtab" type="button" role="tab" data-t="3" aria-selected="false"><b>٣</b><span class="wt-l">الأقسام التسعة</span><span class="wt-s">الأقسام</span></button>
       <button class="wclose" id="wclose" type="button" aria-label="إغلاق الشرح والبدء">×</button>
     </div>
+    <a class="wtour" href="guide.html" target="_blank" rel="noopener">
+      <span class="wtour-ic" aria-hidden="true">▶</span>
+      <span class="wtour-tx"><b>جولة مشاهدة كاملة</b>فيديو يمرّ على كل ما في هذه الصفحة ويشرحه، ويتحرك وحده. توقفه بأي لحظة، أو اختر فصلًا من القائمة.</span>
+      <span class="wtour-go">شاهدها ↗</span>
+    </a>
     <div class="wscr" id="w1">
       <span class="wkick">خريطة حيّة · الأرقام افتراضية للتوضيح</span>
       <h2 id="wtitle">أين يتغيّر الواقع؟</h2>
