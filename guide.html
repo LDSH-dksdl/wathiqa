@@ -64,7 +64,74 @@ background:linear-gradient(rgba(3,14,18,.55),rgba(3,14,18,.78)),var(--poster) ce
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 </style>
-</head>
+<style>@media (max-width:640px){#ai-fab{inset-inline-start:0!important;inset-inline-end:auto!important;bottom:250px!important;width:46px;height:46px;padding:0;justify-content:center;border-radius:0 23px 23px 0;background:#0b4f5c}#ai-fab span{font:800 14px/1 inherit;font-family:inherit;letter-spacing:.5px}#ai-fab svg{display:none}}</style>
+<style>
+#ai [hidden],#ai-fab[hidden]{display:none!important}
+#ai-fab{position:fixed;z-index:60;inset-inline-start:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;padding:11px 16px;border:0;border-radius:999px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 14px/1 inherit;font-family:inherit;box-shadow:0 6px 22px rgba(0,0,0,.28);cursor:pointer}
+#ai-fab svg{width:18px;height:18px}
+#ai-fab:focus-visible,#ai button:focus-visible,#ai textarea:focus-visible,#ai input:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
+#ai{position:fixed;z-index:70;top:0;bottom:0;left:0;width:min(420px,100vw);display:flex;flex-direction:column;background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);border-inline-end:1px solid var(--vw-line,#cfe0e3);box-shadow:0 0 40px rgba(0,0,0,.3);font-family:inherit;font-size:15px;line-height:1.7;direction:rtl;transform:translateX(-105%);transition:transform .22s ease;visibility:hidden}
+#ai.on{transform:none;visibility:visible}
+#ai *{box-sizing:border-box}
+.ai-h{display:flex;align-items:center;gap:10px;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top,0px));border-bottom:1px solid var(--vw-line,#cfe0e3)}
+.ai-h b{flex:1;font-size:16px}
+.ai-h button,.ai-x{border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-chip,#eef5f6);color:var(--vw-ink,#0b3a44);border-radius:8px;padding:6px 10px;font:600 13px/1.2 inherit;font-family:inherit;cursor:pointer}
+.ai-h button:hover{background:var(--vw-chip-h,#dcebed)}
+.ai-where{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12.5px;color:var(--vw-ink2,#4a646b);background:var(--vw-chip,#eef5f6);border-bottom:1px solid var(--vw-line,#cfe0e3)}
+#ai-wt{flex:1;min-width:0}
+#ai-spk{border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);border-radius:999px;padding:3px 10px;font:600 12px/1.5 inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+.ai-f .ai-ic{width:42px;height:42px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-chip,#eef5f6);color:var(--vw-teal,#0b4f5c);border-radius:12px;flex:none}
+.ai-f .ai-ic svg{width:20px;height:20px}
+.ai-f .ai-ic.on{background:var(--vw-warm,#b4541a);border-color:var(--vw-warm,#b4541a);color:#fff;animation:aip 1.2s infinite}
+@keyframes aip{0%,100%{box-shadow:0 0 0 0 rgba(180,84,26,.45)}50%{box-shadow:0 0 0 8px rgba(180,84,26,0)}}
+.ai-body{flex:1;min-height:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+.ai-m{max-width:94%;padding:10px 13px;border-radius:14px;overflow-wrap:anywhere}
+.ai-m p{margin:0 0 8px}.ai-m p:last-child{margin:0}
+.ai-m ul{margin:0 0 8px;padding-inline-start:20px}
+.ai-u{align-self:flex-start;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);border-end-start-radius:4px}
+.ai-a{align-self:flex-end;background:var(--vw-chip,#eef5f6);border:1px solid var(--vw-line,#cfe0e3);border-end-end-radius:4px}
+.ai-err{align-self:stretch;background:var(--vw-warm-bg,#fdf1e7);border:1px solid var(--vw-warm-line,#efcdb2);color:var(--vw-warm,#b4541a);text-align:center}
+.ai-pg{border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);border-radius:6px;padding:0 6px;font:700 13px/1.6 inherit;font-family:inherit;cursor:pointer}
+.ai-dots span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--vw-ink2,#4a646b);animation:aid 1s infinite}
+.ai-dots span:nth-child(2){animation-delay:.15s}.ai-dots span:nth-child(3){animation-delay:.3s}
+@keyframes aid{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.ai-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ai-chips button{border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);border-radius:999px;padding:7px 12px;font:600 13.5px/1.4 inherit;font-family:inherit;cursor:pointer}
+.ai-f{display:flex;gap:8px;align-items:flex-end;padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom,0px));border-top:1px solid var(--vw-line,#cfe0e3)}
+.ai-f textarea{flex:1;min-width:0;resize:none;max-height:120px;border:1px solid var(--vw-line,#cfe0e3);border-radius:12px;padding:9px 12px;background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);font:15px/1.6 inherit;font-family:inherit}
+.ai-f button{border:0;border-radius:12px;padding:10px 16px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 14px/1 inherit;font-family:inherit;cursor:pointer}
+.ai-f button:disabled{opacity:.5;cursor:default}
+.ai-gate{padding:22px 18px;display:flex;flex-direction:column;gap:12px}
+.ai-gate p{margin:0}
+.ai-gate input{border:1px solid var(--vw-line,#cfe0e3);border-radius:10px;padding:11px 12px;background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);font:16px/1.4 inherit;font-family:inherit;direction:ltr;text-align:center;letter-spacing:.06em}
+.ai-gate .ai-go{border:0;border-radius:10px;padding:12px;background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);font:700 15px/1 inherit;font-family:inherit;cursor:pointer}
+.ai-note{font-size:12.5px;color:var(--vw-ink2,#4a646b)}
+.ai-convs{max-height:40vh;overflow-y:auto;border-bottom:1px solid var(--vw-line,#cfe0e3);padding:8px 10px;display:flex;flex-direction:column;gap:6px;background:var(--vw-bar,#fbfdfd)}
+.ai-cv{display:flex;align-items:center;gap:6px;border:1px solid var(--vw-line,#cfe0e3);border-radius:10px;padding:6px 8px;background:var(--vw-chip,#eef5f6)}
+.ai-cv.on{border-color:var(--vw-act,#0b4f5c);box-shadow:inset 0 0 0 1px var(--vw-act,#0b4f5c)}
+.ai-cv-open{flex:1;min-width:0;text-align:start;border:0;background:transparent;color:var(--vw-ink,#0b3a44);font:600 14px/1.6 inherit;font-family:inherit;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-cv button:not(.ai-cv-open){border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-bar,#fbfdfd);color:var(--vw-teal,#0b4f5c);border-radius:7px;padding:3px 9px;font:600 12px/1.5 inherit;font-family:inherit;cursor:pointer;flex:none}
+@media (max-width:640px){
+ #ai{top:auto;left:0;right:0;width:100%;height:84dvh;height:84vh;border-radius:18px 18px 0 0;border-inline-end:0;border-top:1px solid var(--vw-line,#cfe0e3);transform:translateY(105%)}
+ #ai.on{transform:none}
+ body.ai-open #ai-fab{display:none}
+}
+@media (prefers-reduced-motion:reduce){#ai{transition:none}}
+#ai-tools{position:fixed;z-index:60;inset-inline-end:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+#ai-tools[hidden],#fb-box[hidden],#ai-tpanel[hidden]{display:none!important}
+.ai-tpanel{display:flex;flex-direction:column;gap:8px;align-items:flex-end;padding:10px;border-radius:14px;background:var(--vw-bar,#fbfdfd);border:1px solid var(--vw-line,#cfe0e3);box-shadow:0 4px 16px rgba(0,0,0,.2);margin-bottom:8px}
+.ai-tip{margin:0 0 4px;max-width:240px;font-size:13px;line-height:1.7;color:var(--vw-ink,#0b3a44)}
+body.ai-open #ai-tools{display:none}
+.ai-tool{display:inline-flex;align-items:center;padding:9px 14px;border:1px solid #0b3a44;border-radius:999px;background:#0b4f5c;color:#fff;font:700 13px/1.4 inherit;font-family:inherit;text-decoration:none;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.ai-tool:focus-visible,#fb-box button:focus-visible,#fb-box textarea:focus-visible{outline:2px solid var(--vw-focus,#c0612b);outline-offset:2px}
+.fb-box{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.4)}
+.fb-in{width:min(440px,100%);background:var(--vw-bar,#fbfdfd);color:var(--vw-ink,#0b3a44);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:inherit;font-size:15px;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.fb-in textarea{width:100%;min-height:120px;border:1px solid var(--vw-line,#cfe0e3);border-radius:10px;padding:10px;font:inherit;font-family:inherit;background:#fff;color:#0b3a44;resize:vertical}
+.fb-row{display:flex;gap:8px;justify-content:flex-end}
+.fb-row button{border:1px solid var(--vw-line,#cfe0e3);background:var(--vw-chip,#eef5f6);color:var(--vw-ink,#0b3a44);border-radius:8px;padding:8px 14px;font:600 14px/1.2 inherit;font-family:inherit;cursor:pointer}
+.fb-row #fb-send{background:var(--vw-act,#0b4f5c);color:var(--vw-act-fg,#fff);border-color:transparent}
+</style>
+<style>@media (max-width:640px){#ai-fab{bottom:14px!important}}body{padding-bottom:72px}</style></head>
 <body>
 <div class="wrap">
   <header>
@@ -86,7 +153,7 @@ background:linear-gradient(rgba(3,14,18,.55),rgba(3,14,18,.78)),var(--poster) ce
         <button class="btn" id="nextB" type="button">الفصل التالي ←</button>
         <button class="btn on" id="autoB" type="button" aria-pressed="true">التشغيل المتواصل: يعمل</button>
       </div>
-      <p class="note">هذا الفيديو بلا صوت تعليق. الشرح مكتوب على الشاشة نفسها، وتتحرك فيه الصفحة وحدها: المؤشر يضغط، والإطار الذهبي يشير إلى ما نتحدث عنه. أوقفه في أي لحظة، أو ارجع بالشريط، أو اختر فصلًا من القائمة. وعلى الهاتف: افتحه بملء الشاشة وأدِر الجهاز أفقيًا ليكبر الخط المكتوب.</p>
+      <p class="note">هذا الفيديو بلا صوت تعليق. يتحرك فيه مؤشر يضغط على ما نتحدث عنه، والإطار الذهبي يشير إليه. لو عندك دقيقتين فقط، شاهد الفصل الأول، وهو ملخص للفكرة. أوقفه في أي لحظة، أو ارجع بالشريط، أو اختر فصلًا من القائمة. وعلى الهاتف: افتحه بملء الشاشة وأدِر الجهاز أفقيًا ليكبر الخط المكتوب.</p>
     </section>
     <aside class="list" aria-label="الفصول">
       <h2>الفصول<small>١١ فصلًا</small></h2>
@@ -152,5 +219,463 @@ v.src = CH[cur].f; v.preload = 'metadata'; paint();
 })();
 
 </script>
-</body>
+<button type="button" id="ai-fab" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>AI</span></button>
+
+<div id="fb-box" class="fb-box" hidden role="dialog" aria-label="أرسل فكرة أو مقترحًا"><div class="fb-in"><b>أرسل فكرتك أو مقترحك</b><textarea id="fb-text" maxlength="1000" placeholder="اكتب ملاحظتك أو مقترحك على الوثيقة"></textarea><div class="fb-row"><button type="button" id="fb-cancel">إلغاء</button><button type="button" id="fb-send">إرسال</button></div><p class="ai-note" id="fb-msg" role="status"></p></div></div>
+<aside id="ai" role="dialog" aria-label="مساعد القراءة" aria-modal="false" dir="rtl" lang="ar">
+ <div class="ai-h"><b>مساعد القراءة</b><button type="button" id="ai-list" hidden>محادثاتي</button><button type="button" id="ai-new" hidden>محادثة جديدة</button><button type="button" id="ai-close" aria-label="إغلاق">إغلاق</button></div>
+ <div id="ai-gate" class="ai-gate" hidden>
+  <p><b>هذا المساعد لمن عنده رمز دعوة.</b></p>
+  <p class="ai-note">يقرأ معك الوثيقة، ويجيب عن أسئلتك منها، ويكمل الحوار معك. اكتب الرمز الذي أعطاك إياه صاحب الفكرة.</p>
+  <input id="ai-code" type="text" inputmode="latin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="الرمز" aria-label="رمز الدعوة">
+  <button type="button" class="ai-go" id="ai-enter">دخول</button>
+  <p class="ai-note" id="ai-gerr" role="alert"></p>
+ </div>
+ <div id="ai-chat" style="display:none;flex:1;min-height:0;flex-direction:column">
+  <div class="ai-where" id="ai-where"><span id="ai-wt"></span><button type="button" id="ai-spk" hidden></button></div>
+  <div id="ai-convs" class="ai-convs" hidden></div><div class="ai-body" id="ai-body" aria-live="polite"></div>
+  <form class="ai-f" id="ai-form"><textarea id="ai-q" rows="1" placeholder="اكتب سؤالك أو تكلّم" aria-label="سؤالك"></textarea><button type="button" class="ai-ic" id="ai-mic" hidden aria-label="إملاء بالصوت" title="إملاء بالصوت"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button type="button" class="ai-ic" id="ai-wave" hidden aria-label="محاورة صوتية" title="محاورة صوتية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></button><button type="submit" id="ai-send">أرسل</button></form>
+ </div>
+</aside>
+<script>(function(){
+(function(){
+'use strict';
+var URL_='https://wathiqa-assistant.dbyan5919.workers.dev';
+if(!URL_||URL_.indexOf('@@')===0)return;
+var SAMPLE=URL_==='claude-sample',SYS='@@SYSTEM@@';
+/* تعليمات إضافية تُرسل مع كل سؤال (تعدّلها هنا دون لمس الوسيط) */
+var EXTRA='';
+var PAGE_T0=Date.now();
+function extraNow(){
+  var mins=Math.max(1,Math.round((Date.now()-PAGE_T0)/60000));
+  var base=(window.WATHIQA_PAGE&&window.WATHIQA_PAGE.extra)||EXTRA;
+  return base+'\n\nمدة بقاء القارئ في هذه الصفحة منذ فتحها حتى الآن: '+mins+' دقيقة. إن سأل عن الوقت الذي قضاه فأجبه بهذا الرقم.';
+}
+var $=function(s){return document.querySelector(s)};
+var fab=$('#ai-fab'),panel=$('#ai'),gate=$('#ai-gate'),chat=$('#ai-chat'),body=$('#ai-body'),form=$('#ai-form'),q=$('#ai-q'),send=$('#ai-send'),where=$('#ai-where'),codeIn=$('#ai-code'),gerr=$('#ai-gerr'),btnNew=$('#ai-new');
+var mic=$('#ai-mic'),wave=$('#ai-wave'),spk=$('#ai-spk'),wt=$('#ai-wt');
+fab.hidden=false;if($("#ai-tools"))$("#ai-tools").hidden=false;
+var code='',hist=[],busy=false,idx=null,ctl=null,histLoaded=false;
+try{code=localStorage.getItem('ai-code')||''}catch(e){}
+
+/* ——— فهرس الوثيقة للبحث الداخلي ——— */
+function norm(s){return String(s).replace(/[ً-ْـ]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')}
+function toks(s){
+  var out=[],w=norm(s).split(/[^ء-ي0-9]+/);
+  for(var i=0;i<w.length;i++){var t=w[i];if(t.length<3)continue;
+    t=t.replace(/^(وال|بال|لل|فال|كال|ال)/,'');
+    if(t.length>4)t=t.replace(/^[وفبل](?=.{4})/,'');
+    if(t.length<3)continue;out.push(t.slice(0,4));}
+  return out}
+function pageNo(el){var t=(el.textContent||'').slice(-160),m=t.match(/ص\s*(\d+)\s*·/)||t.match(/(\d+)\s*إعداد/);return m?+m[1]:0}
+function title(el){var h=el.querySelector('h1,h2,h3');return h?h.textContent.replace(/\s+/g,' ').trim().slice(0,70):''}
+function clean(el){return (el.textContent||'').replace(/\s+/g,' ').trim()}
+function build(){
+  if(idx)return idx;
+  var t=document.getElementById('tpl-end'),pages=[];
+  if(!t)return (idx={pages:[],df:{}});
+  var list=t.content.querySelectorAll('.page'),df={};
+  for(var i=0;i<list.length;i++){var el=list[i],tx=clean(el),tk=toks(tx),tf={};
+    for(var j=0;j<tk.length;j++)tf[tk[j]]=(tf[tk[j]]||0)+1;
+    for(var k in tf)df[k]=(df[k]||0)+1;
+    pages.push({n:pageNo(el)||i+1,h:title(el),tx:tx,tf:tf,sec:el.dataset.sec||''});}
+  return (idx={pages:pages,df:df});
+}
+function rank(query,skipN,k){
+  var I=build(),N=I.pages.length||1,qt=toks(query),sc=[];
+  if(!qt.length)return [];
+  I.pages.forEach(function(p){
+    if(p.n===skipN||p.sec==='toc'||p.sec==='sec-toc')return;
+    var s=0;qt.forEach(function(w){var f=p.tf[w];if(f)s+=Math.log(1+N/(I.df[w]||1))*(1+Math.log(f))});
+    if(s>0)sc.push([s,p]);});
+  sc.sort(function(a,b){return b[0]-a[0]});
+  return sc.slice(0,k).map(function(x){return x[1]});
+}
+function curPage(){
+  var host=$('#pages');if(!host)return null;
+  var mid=window.innerHeight/2,best=null,bd=1e9;
+  Array.prototype.forEach.call(host.children,function(el){
+    if(el.hidden)return;var r=el.getBoundingClientRect();if(!r.height)return;
+    var d=(r.top<=mid&&r.bottom>=mid)?0:Math.min(Math.abs(r.top-mid),Math.abs(r.bottom-mid));
+    if(d<bd){bd=d;best=el}});
+  return best;
+}
+function trim(s,n){return s.length>n?s.slice(0,n)+' …':s}
+function context(question){
+  var cp=curPage(),parts=[],seen={},I=build();
+  function add(n,h,tx,tag){if(seen[n])return;seen[n]=1;parts.push('[ص '+n+(h?' — '+h:'')+(tag?' — '+tag:'')+']\n'+trim(tx,3600))}
+  var cn=0;
+  if(cp){cn=pageNo(cp);add(cn,title(cp),clean(cp),'الصفحة المفتوحة أمام القارئ الآن')}
+  var qs=question;
+  for(var i=hist.length-1;i>=0&&toks(qs).length<4;i--){if(hist[i].role==='user'&&hist[i].content!==question){qs+=' '+hist[i].content;break}}
+  rank(qs,cn,7).forEach(function(p){add(p.n,p.h,p.tx,'')});
+  I.pages.some(function(p){if(p.sec==='sec-i41'){add(p.n,p.h,p.tx,'ملخص الفكرة كلها');return true}});
+  return {text:parts.join('\n\n'),n:cn,h:cp?title(cp):''};
+}
+
+/* ——— الواجهة ——— */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function inline(s){
+  s=esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  return s.replace(/\(?ص\s*(\d{1,3})\)?/g,function(m,n){return '<button type="button" class="ai-pg" data-pg="'+n+'">ص '+n+'</button>'});
+}
+function render(txt){
+  var out='',blocks=txt.replace(/\r/g,'').split(/\n{2,}/);
+  blocks.forEach(function(b){
+    var lines=b.split('\n'),isList=lines.every(function(l){return /^\s*([-•*]|\d+[.)])\s+/.test(l)});
+    if(isList&&lines.length){out+='<ul>'+lines.map(function(l){return '<li>'+inline(l.replace(/^\s*([-•*]|\d+[.)])\s+/,''))+'</li>'}).join('')+'</ul>'}
+    else if(b.trim()){out+='<p>'+lines.map(inline).join('<br>')+'</p>'}});
+  return out;
+}
+function bubble(cls,html){var d=document.createElement('div');d.className='ai-m '+cls;d.innerHTML=html;body.appendChild(d);body.scrollTop=body.scrollHeight;return d}
+function chips(){
+  var cp=curPage(),h=cp?title(cp):'';
+  var w=document.createElement('div');w.className='ai-chips';w.id='ai-chips';
+  [['لخّص لي هذه الصفحة'],['ما الفكرة الأساسية للمشروع؟'],['ما الذي أقرؤه أولًا؟'],['ما أضعف نقطة في المشروع؟']].forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.textContent=c[0];b.onclick=function(){ask(c[0])};w.appendChild(b)});
+  body.appendChild(w);
+}
+function showWhere(){
+  if(conv)return;
+  var cp=curPage();
+  wt.textContent=cp?('أنت الآن في: ص '+pageNo(cp)+(title(cp)?' — '+title(cp):'')):'';
+}
+function open(){
+  panel.classList.add('on');document.body.classList.add('ai-open');
+  if(code||SAMPLE){showChat()}else{showGate()}
+}
+function close(){endConv();stopListen();stopSpeak();panel.classList.remove('on');document.body.classList.remove('ai-open');if(ctl){try{ctl.abort()}catch(e){}}fab.focus()}
+function showGate(){gate.hidden=false;chat.style.display='none';btnNew.hidden=true;setTimeout(function(){codeIn.focus()},60)}
+/* ——— المحادثات المتعددة: تُحفظ على الخادم، بحدّ عشر محادثات ——— */
+var convs=[],curId=null,listBtn=$('#ai-list');
+function nid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function cur(){for(var i=0;i<convs.length;i++)if(convs[i].id===curId)return convs[i];return null}
+function titleOf(c){if(c.title)return c.title;var f=(c.messages||[]).filter(function(m){return m.role==='user'})[0];return f?f.content.slice(0,40):'محادثة جديدة'}
+function fmtDate(t){try{return new Date(t).toLocaleDateString('ar',{day:'numeric',month:'short'})}catch(e){return ''}}
+function persist(){if(SAMPLE||!code)return;var keep=convs.filter(function(c){return c.messages&&c.messages.length});post({code:code,save:true,convs:keep}).catch(function(){})}
+function paintHist(){
+  body.innerHTML='';
+  if(!hist.length){bubble('ai-a','<p>أهلًا بك. أقرأ معك هذه الوثيقة وأجيب من نصها. اسألني عن الصفحة المفتوحة أو عن أي جزء، وسأكمل معك الحوار.</p>');chips()}
+  else hist.forEach(function(x){
+    if(x.role==='user'){var u=document.createElement('div');u.className='ai-m ai-u';u.textContent=x.content;body.appendChild(u)}
+    else bubble('ai-a',render(x.content));
+  });
+  body.scrollTop=body.scrollHeight;
+}
+function saveHist(){
+  if(!hist.length)return;
+  var c=cur();
+  if(!c){c={id:nid(),title:'',updated:0,messages:[]};convs.unshift(c);curId=c.id}
+  c.messages=hist.slice(-20);c.updated=Date.now();
+  convs.sort(function(a,b){return b.updated-a.updated});
+  convs=convs.slice(0,10);
+  persist();
+}
+function loadHist(){
+  histLoaded=true;
+  post({code:code,hist:true}).then(function(r){return r.json().catch(function(){return {}})}).then(function(j){
+    var list=(j&&j.convs)||[];
+    if(!list.length||hist.length)return;
+    convs=list;curId=convs[0].id;hist=(convs[0].messages||[]).slice(0);
+    paintHist();showList(false);
+  }).catch(function(){});
+}
+function showChat(){
+  gate.hidden=true;chat.style.display='flex';btnNew.hidden=false;listBtn.hidden=false;showWhere();
+  if(!histLoaded&&!SAMPLE)loadHist();
+  if(!body.children.length)paintHist();
+  setTimeout(function(){q.focus()},60);
+}
+function newConv(){
+  endConv();stopListen();stopSpeak();if(ctl){try{ctl.abort()}catch(e){}}
+  busy=false;send.disabled=false;
+  saveHist();
+  curId=null;hist=[];
+  persist();paintHist();showList(false);
+}
+function switchConv(id){
+  if(id===curId){showList(false);return}
+  endConv();stopListen();stopSpeak();if(ctl){try{ctl.abort()}catch(e){}}
+  busy=false;send.disabled=false;
+  saveHist();
+  var c=null;convs.forEach(function(x){if(x.id===id)c=x});if(!c)return;
+  curId=id;hist=(c.messages||[]).slice(0);paintHist();showList(false);
+}
+function deleteConv(id){
+  if(!confirm('نحذف هذه المحادثة نهائيًا؟'))return;
+  convs=convs.filter(function(x){return x.id!==id});
+  if(id===curId){curId=null;hist=[];if(convs.length){curId=convs[0].id;hist=(convs[0].messages||[]).slice(0)}paintHist()}
+  persist();showList(true);
+}
+function renameConv(id){
+  var c=null;convs.forEach(function(x){if(x.id===id)c=x});if(!c)return;
+  var t=prompt('اسم المحادثة',titleOf(c));
+  if(t&&t.trim()){c.title=t.trim().slice(0,60);persist();showList(true)}
+}
+function showList(on){
+  var box=$('#ai-convs');if(!box)return;
+  if(on===undefined)on=box.hidden;
+  if(!on){box.hidden=true;return}
+  box.innerHTML='';box.hidden=false;
+  if(!convs.length){var e=document.createElement('p');e.className='ai-note';e.textContent='لا توجد محادثات محفوظة بعد.';box.appendChild(e);return}
+  convs.forEach(function(c){
+    var row=document.createElement('div');row.className='ai-cv'+(c.id===curId?' on':'');
+    var a=document.createElement('button');a.type='button';a.className='ai-cv-open';a.textContent=titleOf(c);a.title=fmtDate(c.updated);
+    a.addEventListener('click',function(){switchConv(c.id)});
+    var r=document.createElement('button');r.type='button';r.textContent='تسمية';r.setAttribute('aria-label','تسمية المحادثة');r.addEventListener('click',function(){renameConv(c.id)});
+    var d=document.createElement('button');d.type='button';d.textContent='حذف';d.setAttribute('aria-label','حذف المحادثة');d.addEventListener('click',function(){deleteConv(c.id)});
+    row.appendChild(a);row.appendChild(r);row.appendChild(d);box.appendChild(row);
+  });
+}
+listBtn.addEventListener('click',function(){showList()});
+var tools=$('#ai-tools'),fbBox=$('#fb-box'),fbText=$('#fb-text'),fbMsg=$('#fb-msg');
+// أدوات الصفحة اختيارية في نسخة الخريطة؛ غيابها يجب ألا يوقف تهيئة المساعد.
+var tpAsk=$('#tp-ask'),aiTbtn=$('#ai-tbtn'),aiFbtn=$('#ai-fbtn'),aiTpanel=$('#ai-tpanel');
+if(tpAsk)tpAsk.addEventListener('click',function(){if(aiTpanel)aiTpanel.hidden=true;fab.click()});
+if(aiTbtn)aiTbtn.addEventListener('click',function(){if(!aiTpanel)return;aiTpanel.hidden=!aiTpanel.hidden;this.setAttribute('aria-expanded',String(!aiTpanel.hidden))});
+if(aiFbtn)aiFbtn.addEventListener('click',function(){if(aiTpanel)aiTpanel.hidden=true;
+  if(!code){fab.click();return}
+  if(fbBox)fbBox.hidden=false;if(fbMsg)fbMsg.textContent='';if(fbText)fbText.focus();
+});
+if($('#fb-cancel'))$('#fb-cancel').addEventListener('click',function(){if(fbBox)fbBox.hidden=true});
+if($('#fb-send'))$('#fb-send').addEventListener('click',function(){
+  var t=fbText?fbText.value.trim():'';
+  if(!t){if(fbMsg)fbMsg.textContent='اكتب الفكرة أولًا.';return}
+  if(fbMsg)fbMsg.textContent='جارٍ الإرسال…';
+  post({code:code,fb:true,text:t}).then(function(r){return r.json().catch(function(){return {}})}).then(function(j){
+    if(j&&j.ok){if(fbText)fbText.value='';if(fbMsg)fbMsg.textContent='شكرًا، وصلت فكرتك.';setTimeout(function(){if(fbBox)fbBox.hidden=true},1200)}
+    else if(j&&j.error==='code'){code='';try{localStorage.removeItem('ai-code')}catch(e){};if(fbMsg)fbMsg.textContent='الرمز لم يعد صالحًا، أدخله من جديد في المساعد.'}
+    else if(fbMsg)fbMsg.textContent='تعذّر الإرسال، حاول مرة أخرى.';
+  }).catch(function(){if(fbMsg)fbMsg.textContent='تعذّر الاتصال، حاول لاحقًا.'});
+});
+/* ——— في صفحة غير الوثيقة: نحمل فصول الوثيقة من ملفها ليجيب المساعد منها ——— */
+function preloadDoc(){
+  if(document.getElementById('tpl-end'))return;
+  fetch('index.html').then(function(r){return r.ok?r.text():''}).then(function(t){
+    if(!t)return;
+    var src=new DOMParser().parseFromString(t,'text/html').getElementById('tpl-end');
+    if(!src||document.getElementById('tpl-end'))return;
+    document.body.appendChild(document.importNode(src,true));idx=null;
+  }).catch(function(){});
+}
+fab.addEventListener('click',preloadDoc,{once:true});
+(function(){var bar=document.querySelector('.vw-bar');if(!bar)return;
+  function setHidden(v){bar.classList.toggle('is-hidden',v)}
+  var sy=0;
+  document.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchmove',function(e){var y=e.touches[0].clientY,d=y-sy;sy=y;if(d<-6)setHidden(true);else if(d>6)setHidden(false)},{passive:true});
+  document.addEventListener('wheel',function(e){if(e.deltaY>6)setHidden(true);else if(e.deltaY<-6)setHidden(false)},{passive:true});
+})();
+function post(payload,signal){
+  return fetch(URL_,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:signal});
+}
+function enter(){
+  var c=codeIn.value.trim();if(!c)return;gerr.textContent='جارٍ التحقق…';
+  post({check:true,code:c}).then(function(r){return r.json().catch(function(){return {}})}).then(function(j){
+    if(j&&j.ok){code=c;try{localStorage.setItem('ai-code',c)}catch(e){}gerr.textContent='';showChat()}
+    else gerr.textContent=(j&&j.error==='off')?'هذا الرمز موقوف.':'الرمز غير صحيح. تأكد منه أو اطلب رمزًا من صاحب الفكرة.';
+  }).catch(function(){gerr.textContent='تعذّر الاتصال. تأكد من الشبكة وحاول مرة أخرى.'});
+}
+var HELLO_SET={'الو':1,'الوو':1,'الوه':1,'هلو':1,'هلا':1,'مرحبا':1,'سمعني':1,'سمعاني':1,'سامعني':1,'سامعاني':1,'تسمعني':1,'تسمعيني':1,'تسمعوني':1,'سامعيني':1,'سامعين':1,'تسمعين':1,'الوي':1};
+function isHello(t){var k=norm(t).replace(/[^ء-ي\s]/g,'').replace(/\s+/g,'').trim();return !!HELLO_SET[k]}
+function ask(text,viaVoice){
+  text=(text||'').trim();if(!text||busy)return Promise.resolve('');
+  if(text.length<=30&&isHello(text)){
+    var rep='نعم، أسمعك بوضوح. تفضّل، اسألني عن الوثيقة أو عن الصفحة التي أمامك.';
+    var c0=$('#ai-chips');if(c0)c0.remove();
+    var ub0=document.createElement('div');ub0.className='ai-m ai-u';ub0.textContent=text;body.appendChild(ub0);
+    bubble('ai-a','<p>'+esc(rep)+'</p>');
+    hist.push({role:'user',content:text},{role:'assistant',content:rep});saveHist();
+    return Promise.resolve(rep);
+  }
+  var c=$('#ai-chips');if(c)c.remove();
+  busy=true;send.disabled=true;q.value='';q.style.height='auto';
+  var ub=document.createElement('div');ub.className='ai-m ai-u';ub.textContent=text;body.appendChild(ub);
+  var ab=bubble('ai-a','<span class="ai-dots"><span></span><span></span><span></span></span>');
+  var ctx=context(text);
+  var msgs=hist.slice(-10).concat([{role:'user',content:text}]);
+  var acc='';ctl=new AbortController();
+  var where_=ctx.n?('ص '+ctx.n+(ctx.h?' — '+ctx.h:'')):'';
+  var run=SAMPLE?(window.claude.use('sample').then(function(sm){
+    if(!sm)throw {error:'api'};
+    var lead=SYS+'\n\nالقارئ الآن عند: '+(where_||'غير معروف')+'\n\n===== مقاطع من الوثيقة =====\n'+ctx.text+'\n===== نهاية المقاطع =====\n\nسؤال القارئ الآن: ';
+    var m2=msgs.slice(0,-1).concat([{role:'user',content:lead+text}]);
+    return sm(m2,{signal:ctl.signal,cache:false,onText:function(o){acc=o.text;ab.innerHTML=render(acc);body.scrollTop=body.scrollHeight}}).then(function(r){if(r&&r.text)acc=r.text;ab.innerHTML=render(acc)});
+  })):(post({code:code,messages:msgs,context:ctx.text,where:where_,extra:extraNow()},ctl.signal).then(function(r){
+    if(!r.ok||!r.body){return r.json().catch(function(){return {}}).then(function(j){throw j||{}})}
+    var rd=r.body.getReader(),dec=new TextDecoder('utf-8'),buf='';
+    function pump(){return rd.read().then(function(x){
+      if(x.done)return;
+      buf+=dec.decode(x.value,{stream:true});
+      var parts=buf.split('\n');buf=parts.pop();
+      parts.forEach(function(l){
+        if(l.indexOf('data:')!==0)return;
+        var d=l.slice(5).trim();if(!d||d==='[DONE]')return;
+        try{var e=JSON.parse(d);
+          if(e.type==='content_block_delta'&&e.delta&&e.delta.type==='text_delta'){acc+=e.delta.text;ab.innerHTML=render(acc);body.scrollTop=body.scrollHeight}
+          else if(e.type==='error'){throw {error:'api'}}
+        }catch(er){if(er&&er.error)throw er}});
+      return pump()})}
+    return pump();
+  }));
+  return run.then(function(){
+    if(!acc){ab.className='ai-m ai-err';ab.textContent='لم يصلني جواب. حاول مرة أخرى.'}
+    else{hist.push({role:'user',content:text},{role:'assistant',content:acc});saveHist();if(!conv&&speakOn)speakP(acc)}
+  }).catch(function(j){
+    if(j&&j.name==='AbortError')return;
+    var m='تعذّر الاتصال بالمساعد الآن. حاول بعد قليل.';
+    if(j&&j.error==='code'){m='الرمز لم يعد صالحًا.';try{localStorage.removeItem('ai-code')}catch(e){}code='';setTimeout(showGate,900)}
+    else if(j&&j.error==='cap'){m='بلغتَ حدّ الأسئلة لهذا اليوم. تعود غدًا بإذن الله.'}
+    else if(j&&j.error==='busy'){m='المساعد مشغول الآن. حاول بعد دقيقة.'}
+    ab.className='ai-m ai-err';ab.textContent=m;
+  }).then(function(){busy=false;send.disabled=false;body.scrollTop=body.scrollHeight;showWhere();return acc});
+}
+/* ——— الصوت: إملاء + محاورة متواصلة ——— */
+var conv=false,empty=0,listening=false,speakOn=false,V={dict:null,tts:null,cb:null,rec:null,speaking:false};
+try{speakOn=localStorage.getItem('ai-speak')==='1'}catch(e){}
+function WS(){return window.SpeechRecognition||window.webkitSpeechRecognition}
+function canListen(){return !!(V.dict||WS())}
+function canSpeak(){return !!(V.tts||window.speechSynthesis)}
+function plain(t){return t.replace(/\(?ص\s*\d{1,3}\)?/g,'').replace(/\*\*/g,'').replace(/^\s*([-•*]|\d+[.)])\s+/gm,'').replace(/\s+/g,' ').trim().slice(0,1900)}
+function voiceUI(){
+  mic.hidden=!canListen();wave.hidden=!(canListen()&&canSpeak());
+  spk.hidden=!canSpeak();
+  spk.textContent=V.speaking?'أوقف القراءة':(speakOn?'القراءة بصوت: تعمل':'القراءة بصوت: متوقفة');
+  mic.classList.toggle('on',listening&&!conv);wave.classList.toggle('on',conv);
+  q.placeholder=listening?'أصغي إليك… تكلّم الآن':'اكتب سؤالك أو تكلّم';
+}
+function status(t){wt.textContent=t}
+function initVoice(){
+  if(SAMPLE&&window.claude&&window.claude.use){
+    window.claude.use('dictation').then(function(d){if(!d)return;V.dict=d;
+      d.onPartial(function(o){if(V.cb)V.cb.partial(o.text)});
+      d.onFinal(function(o){if(V.cb)V.cb.final(o.text)});
+      d.onState(function(o){if(o.state==='idle'&&V.cb)V.cb.end()});voiceUI()}).catch(function(){});
+    window.claude.use('tts').then(function(t){if(t){V.tts=t;voiceUI()}}).catch(function(){});
+  }
+  if(window.speechSynthesis&&window.speechSynthesis.getVoices)window.speechSynthesis.getVoices();
+  voiceUI();
+}
+/* يصغي مرة واحدة ويعيد النص (فارغًا إن لم يسمع شيئًا) أو يرفض بخطأ الإذن */
+function listenOnce(){
+  return new Promise(function(res,rej){
+    var got='';listening=true;voiceUI();
+    function done(t){listening=false;V.cb=null;V.rec=null;voiceUI();res((t||'').trim())}
+    if(V.dict){
+      V.cb={partial:function(t){q.value=got+(got?' ':'')+t},final:function(t){got+=(got?' ':'')+t;q.value=got},end:function(){done(got)}};
+      V.dict.start().catch(function(e){listening=false;V.cb=null;voiceUI();rej({error:'mic'})});
+    }else{
+      var R=WS(),r=new R();r.lang='ar-SA';r.interimResults=true;r.continuous=false;r.maxAlternatives=1;
+      var txt='',fin=false;
+      r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;txt=t;q.value=t};
+      r.onerror=function(e){var er=e&&e.error;if(er==='no-speech'||er==='aborted')return;fin=true;listening=false;V.rec=null;voiceUI();rej({error:(er==='not-allowed'||er==='service-not-allowed')?'mic':(er||'mic')})};
+      r.onend=function(){if(!fin){fin=true;done(txt)}};
+      V.rec=r;try{r.start()}catch(e){listening=false;voiceUI();rej({error:'mic'})}
+    }
+  });
+}
+function stopListen(){
+  try{if(V.dict&&V.cb)V.dict.stop()}catch(e){}
+  try{if(V.rec)V.rec.stop()}catch(e){}
+}
+function speakP(text){
+  var t=plain(text);if(!t||!canSpeak())return Promise.resolve();
+  V.speaking=true;voiceUI();
+  var fin=function(){V.speaking=false;voiceUI()};
+  if(V.tts)return V.tts.speak(t,{language:'ar'}).then(fin,fin);
+  return new Promise(function(res){
+    var u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';
+    try{var vs=speechSynthesis.getVoices();for(var i=0;i<vs.length;i++){if(/^ar/i.test(vs[i].lang)){u.voice=vs[i];break}}}catch(e){}
+    u.onend=u.onerror=function(){fin();res()};
+    speechSynthesis.cancel();speechSynthesis.speak(u);
+  });
+}
+function stopSpeak(){
+  try{if(V.tts)V.tts.stop()}catch(e){}
+  try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}
+  V.speaking=false;voiceUI();
+}
+function micDenied(e){
+  var er=e&&e.error,m='لم يُسمح باستعمال المايكروفون هنا. اسمح به من إعدادات المتصفح للموقع، أو اكتب سؤالك.';
+  if(er==='network')m='تعذّر الوصول إلى خدمة تحويل الصوت إلى نص. قد تحجبها الشبكة أو برنامج الاتصال عندك. جرّب من الجوال، أو اكتب سؤالك.';
+  else if(er==='audio-capture')m='لم أجد مايكروفونًا يعمل في هذا الجهاز. تأكد من توصيله واختياره في إعدادات النظام.';
+  else if(er==='language-not-supported')m='هذا المتصفح لا يدعم تحويل الكلام العربي إلى نص.';
+  bubble('ai-err',m);
+}
+function dictate(){
+  if(conv)return;
+  if(listening){stopListen();return}
+  stopSpeak();
+  listenOnce().then(function(t){if(t){q.value=t;q.focus();q.style.height='auto';q.style.height=Math.min(120,q.scrollHeight)+'px'}}).catch(micDenied);
+}
+function bargeWatch(){
+  var txt='',r=null;
+  try{var R=WS();r=new R();r.lang='ar-SA';r.interimResults=true;r.continuous=true;r.maxAlternatives=1;
+    r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;t=t.trim();
+      if(t.length>=2){txt=t;if(V.speaking)stopSpeak()}};
+    r.onerror=function(){};r.onend=function(){};r.start();
+  }catch(e){r=null}
+  return {done:function(){try{if(r)r.stop()}catch(e){}return Promise.resolve(txt)}};
+}
+function answerAndSpeak(t){
+  return ask(t,true).then(function(ans){
+    if(!conv)return;
+    if(!ans){endConv();return}
+    status('أتكلم…');
+    var bw=V.dict?null:bargeWatch();
+    return speakP(ans).then(function(){return bw?bw.done():''}).then(function(heard){
+      if(!conv)return;
+      if(heard)return answerAndSpeak(heard);
+      return convLoop();
+    });
+  });
+}
+function convLoop(){
+  if(!conv)return;
+  status('أصغي إليك…');voiceUI();
+  listenOnce().then(function(t){
+    if(!conv)return;
+    if(!t){if(++empty>=2){endConv('لم أسمع شيئًا فأوقفت المحاورة. اضغط الزر لتبدأ من جديد.');return}return convLoop()}
+    empty=0;status('أفكّر…');
+    return answerAndSpeak(t);
+  }).catch(function(e){if(conv){endConv();micDenied(e)}});
+}
+function startConv(){
+  if(conv){endConv();return}
+  stopSpeak();var c=$('#ai-chips');if(c)c.remove();
+  conv=true;empty=0;voiceUI();convLoop();
+}
+function endConv(msg){
+  var was=conv;conv=false;stopListen();stopSpeak();voiceUI();
+  if(was){showWhere();if(msg)bubble('ai-a','<p>'+esc(msg)+'</p>')}
+}
+mic.addEventListener('click',dictate);
+wave.addEventListener('click',startConv);
+spk.addEventListener('click',function(){
+  if(V.speaking){stopSpeak();return}
+  speakOn=!speakOn;try{localStorage.setItem('ai-speak',speakOn?'1':'0')}catch(e){}voiceUI();
+});
+initVoice();
+
+function goPage(n){
+  var full=document.querySelector('.vw-tabs .vw-btn[data-m="full"]');
+  function find(){var host=$('#pages'),r=null;if(!host)return null;Array.prototype.forEach.call(host.children,function(el){if(!r&&pageNo(el)===n)r=el});return r}
+  var el=find();
+  if(!el||el.hidden){if(full)full.click();el=find()}
+  if(el){if(window.innerWidth<=640)close();setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+}
+fab.addEventListener('click',open);
+$('#ai-close').addEventListener('click',close);
+$('#ai-enter').addEventListener('click',enter);
+codeIn.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();enter()}});
+form.addEventListener('submit',function(e){e.preventDefault();ask(q.value)});
+q.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask(q.value)}});
+q.addEventListener('input',function(){q.style.height='auto';q.style.height=Math.min(120,q.scrollHeight)+'px'});
+btnNew.addEventListener('click',newConv);
+body.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ai-pg');if(b)goPage(+b.dataset.pg)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('on'))close()});
+window.addEventListener('scroll',function(){if(panel.classList.contains('on')&&!gate.hidden===false){}if(panel.classList.contains('on'))showWhere()},{passive:true});
+})();
+})();</script>
+<div style="text-align:center;padding:18px 12px 26px;font-size:14px;color:#9fb9bd;">إعداد: <a href="https://drive.google.com/drive/folders/12R5ibfhLgAnttTSCrj4FzLy1j4W7cgsj?usp=drive_link" target="_blank" rel="noopener" style="color:#f0c75e;text-decoration:underline;">حكيم السيد</a></div></body>
 </html>
